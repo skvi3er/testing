@@ -100,78 +100,6 @@
   .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
   .modal-buttons .btn { padding: 10px 24px; }
 
-  /* ===== МОДАЛКА С ВОПРОСОМ ===== */
-  .question-overlay {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
-    z-index: 9999;
-    justify-content: center;
-    align-items: center;
-    backdrop-filter: blur(4px);
-  }
-  .question-overlay.hidden { display: none; }
-  .question-box {
-    background: white;
-    padding: 40px 48px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 450px;
-    width: 90%;
-    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
-    animation: popIn 0.3s ease;
-    position: relative;
-  }
-  @keyframes popIn {
-    0% { transform: scale(0.8); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .question-box h2 {
-    font-size: 48px;
-    margin-bottom: 8px;
-  }
-  .question-box p {
-    font-size: 22px;
-    color: #1a1a2e;
-    margin-bottom: 28px;
-    font-weight: 600;
-  }
-  .question-box .q-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    position: relative;
-  }
-  .question-box .q-btn {
-    padding: 12px 40px;
-    border: none;
-    border-radius: 12px;
-    font-size: 18px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.15s;
-    min-width: 120px;
-  }
-  .question-box .q-btn-yes {
-    background: #3b82f6;
-    color: white;
-  }
-  .question-box .q-btn-yes:hover {
-    background: #2563eb;
-    transform: scale(1.05);
-  }
-  .question-box .q-btn-no {
-    background: #ef4444;
-    color: white;
-    position: relative;
-    transition: left 0.08s ease, top 0.08s ease;
-    z-index: 1;
-  }
-
   @media (max-width: 768px) {
     body { padding: 10px; }
     .header-left h1 { font-size: 18px; }
@@ -186,25 +114,10 @@
     th, td { padding: 8px 10px; font-size: 12px; }
     .avatar { width: 28px; height: 28px; font-size: 11px; }
     .dropdown-content { min-width: 180px; right: 0; left: auto; }
-    .question-box { padding: 28px 20px; }
-    .question-box p { font-size: 18px; }
-    .question-box .q-btn { padding: 10px 24px; font-size: 16px; min-width: 80px; }
   }
 </style>
 </head>
 <body>
-
-<!-- ===== МОДАЛКА С ВОПРОСОМ ===== -->
-<div class="question-overlay" id="questionOverlay">
-  <div class="question-box" id="questionBox">
-    <h2>🤔</h2>
-    <p>Ты гей?</p>
-    <div class="q-buttons">
-      <button class="q-btn q-btn-yes" onclick="closeQuestion()">Да</button>
-      <button class="q-btn q-btn-no" id="noBtn">Нет</button>
-    </div>
-  </div>
-</div>
 
 <div class="container">
   <div class="header">
@@ -324,80 +237,6 @@ let nextId = 1;
 let currentSort = 'reset';
 let editingNameId = null;
 let dataLoaded = false;
-
-// ==========================================
-// 🎯 МОДАЛКА С ВОПРОСОМ
-// ==========================================
-
-function closeQuestion() {
-  document.getElementById('questionOverlay').classList.add('hidden');
-}
-
-// Убегающая кнопка "Нет" по всему экрану
-document.addEventListener('DOMContentLoaded', function() {
-  const noBtn = document.getElementById('noBtn');
-  const overlay = document.getElementById('questionOverlay');
-  const box = document.getElementById('questionBox');
-
-  noBtn.addEventListener('mouseover', function(e) {
-    // Получаем размеры окна
-    const winW = window.innerWidth;
-    const winH = window.innerHeight;
-
-    // Размеры кнопки
-    const btnW = noBtn.offsetWidth;
-    const btnH = noBtn.offsetHeight;
-
-    // Случайная позиция с отступами, чтобы кнопка не вылетала за экран
-    const maxX = winW - btnW - 20;
-    const maxY = winH - btnH - 20;
-
-    let newX = Math.random() * maxX;
-    let newY = Math.random() * maxY;
-
-    // Убеждаемся, что кнопка не улетает слишком далеко от модалки
-    // (чтобы было видно, куда она убежала)
-    const boxRect = box.getBoundingClientRect();
-    const centerX = boxRect.left + boxRect.width / 2;
-    const centerY = boxRect.top + boxRect.height / 2;
-
-    // Ограничиваем радиус убегания (чтобы не улетала в другой угол)
-    const maxDist = Math.min(winW, winH) * 0.6;
-    let dx = newX + btnW/2 - centerX;
-    let dy = newY + btnH/2 - centerY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist > maxDist) {
-      newX = centerX + (dx / dist) * maxDist - btnW/2;
-      newY = centerY + (dy / dist) * maxDist - btnH/2;
-    }
-
-    // Ограничиваем, чтобы не выходила за экран
-    newX = Math.max(10, Math.min(maxX, newX));
-    newY = Math.max(10, Math.min(maxY, newY));
-
-    noBtn.style.position = 'fixed';
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
-    noBtn.style.transform = 'scale(0.85)';
-    setTimeout(() => { noBtn.style.transform = 'scale(1)'; }, 150);
-  });
-
-  // Если нажали на "Нет" — ничего не происходит, просто убегает
-  noBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    const winW = window.innerWidth;
-    const winH = window.innerHeight;
-    const btnW = noBtn.offsetWidth;
-    const btnH = noBtn.offsetHeight;
-    const maxX = winW - btnW - 20;
-    const maxY = winH - btnH - 20;
-    const newX = Math.random() * maxX;
-    const newY = Math.random() * maxY;
-    noBtn.style.position = 'fixed';
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
-  });
-});
 
 // ==========================================
 // 💾 РАБОТА С ДАННЫМИ
@@ -691,4 +530,146 @@ function renderTable() {
 
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statRemain').textContent = remain;
-  document.getElementById
+  document.getElementById('statPrize').textContent = prize;
+  document.getElementById('rowCount').textContent = players.length + ' игроков';
+
+  if (!players.length) {
+    document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков. Нажмите "Добавить игрока"</td></tr>';
+    return;
+  }
+
+  let max = Math.max(1, ...players.map(p => p.amount));
+  let html = '';
+
+  data.forEach(p => {
+    const remainP = Math.floor(p.amount * 0.4);
+    const prizeP = Math.floor(p.amount / 100);
+    const progress = (p.amount / max * 100).toFixed(1);
+    const empty = p.amount === 0;
+
+    let topPlace = 0;
+    if (p.amount > 0) {
+      const idx = top3Ids.indexOf(p.id);
+      if (idx !== -1) topPlace = idx + 1;
+    }
+
+    let nameHtml = '';
+    if (editingNameId === p.id) {
+      nameHtml = `
+        <input class="name-input" type="text" value="${p.name}" id="nameInput_${p.id}" 
+               onblur="saveName(${p.id}, this)" 
+               onkeydown="if(event.key==='Enter') saveName(${p.id}, this); if(event.key==='Escape') cancelEditName();"
+               autofocus>
+      `;
+    } else {
+      nameHtml = `<span class="name-text" onclick="startEditName(${p.id})">${p.name}</span>`;
+    }
+
+    html += `<tr>
+      <td>
+        <div class="name-cell">
+          ${getAvatarHtml(p, topPlace)}
+          ${nameHtml}
+        </div>
+      </td>
+      <td style="text-align:center">
+        <input type="number" value="${p.amount}" min="0" onchange="updateAmount(${p.id}, this.value)">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${progress}%;background:${empty ? '#e5e7eb' : '#3b82f6'};"></div>
+        </div>
+      </td>
+      <td style="text-align:center"><span class="badge badge-blue">${p.cumulative || 0}</span></td>
+      <td style="text-align:center"><span class="badge ${remainP > 0 ? 'badge-green' : 'badge-gray'}">${remainP}</span></td>
+      <td style="text-align:center">
+        <span class="badge ${prizeP > 0 ? 'badge-amber' : 'badge-gray'}">
+          ${prizeP > 0 ? '📦 ' : ''}${prizeP}
+        </span>
+      </td>
+      <td><button class="btn-delete-row" onclick="deletePlayer(${p.id})">×</button></td>
+    </tr>`;
+  });
+
+  html += `<tr class="total-row">
+    <td>📊 ИТОГО</td>
+    <td style="text-align:center">${total}</td>
+    <td style="text-align:center">${total}</td>
+    <td style="text-align:center">${remain}</td>
+    <td style="text-align:center">${prize} пачек</td>
+    <td></td>
+  </tr>`;
+
+  document.getElementById('tableBody').innerHTML = html;
+
+  if (editingNameId !== null) {
+    const input = document.getElementById('nameInput_' + editingNameId);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
+}
+
+// ==========================================
+// 🎮 ДЕЙСТВИЯ
+// ==========================================
+
+function updateAmount(id, val) {
+  const p = players.find(p => p.id === id);
+  if (p) {
+    p.amount = Math.max(0, parseInt(val) || 0);
+    let sum = 0;
+    players.forEach(player => {
+      sum += player.amount;
+      player.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function addPlayer() {
+  const name = prompt('Введите имя игрока:');
+  if (name && name.trim()) {
+    players.push({ id: nextId++, name: name.trim(), amount: 0 });
+    let sum = 0;
+    players.forEach(p => {
+      sum += p.amount;
+      p.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function deletePlayer(id) {
+  if (confirm('Удалить игрока?')) {
+    players = players.filter(p => p.id !== id);
+    let sum = 0;
+    players.forEach(p => {
+      sum += p.amount;
+      p.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function clearAll() {
+  if (confirm('❗ ВНИМАНИЕ! Это удалит ВСЕХ игроков и все данные. Продолжить?')) {
+    if (confirm('Вы уверены? Данные восстановить будет невозможно!')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  }
+}
+
+// ==========================================
+// 🚀 ЗАПУСК
+// ==========================================
+
+loadFromFirebase();
+</script>
+</body>
+</html>
