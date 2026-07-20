@@ -450,19 +450,19 @@
 
   <div class="toolbar">
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <button class="btn btn-primary" onclick="addPlayer()">➕ Добавить игрока</button>
+      <button class="btn btn-primary" id="btnAddPlayer">➕ Добавить игрока</button>
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Поиск..." oninput="renderTable()">
+        <input type="text" id="searchInput" placeholder="Поиск...">
       </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="btn btn-ghost" onclick="sortTable('name')">🔤 По имени</button>
-      <button class="btn btn-ghost" onclick="sortTable('total')">📊 По сумме</button>
+      <button class="btn btn-ghost" id="btnSortName">🔤 По имени</button>
+      <button class="btn btn-ghost" id="btnSortTotal">📊 По сумме</button>
 
       <div class="dropdown">
-        <button class="btn btn-save" onclick="toggleSaveDropdown()">💾 Сохранение ▼</button>
+        <button class="btn btn-save" id="btnSaveDropdown">💾 Сохранение ▼</button>
         <div class="dropdown-content" id="saveDropdown">
-          <button class="dropdown-item dropdown-new" onclick="showSaveModal()">📝 Новое сохранение</button>
+          <button class="dropdown-item dropdown-new" id="btnNewSave">📝 Новое сохранение</button>
           <div class="dropdown-divider"></div>
           <div id="savesList">
             <div class="dropdown-empty">Загрузка...</div>
@@ -470,7 +470,7 @@
         </div>
       </div>
 
-      <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить</button>
+      <button class="btn btn-danger" id="btnClear">🗑️ Очистить</button>
     </div>
   </div>
 
@@ -499,14 +499,14 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="saveModal">
+<div class="modal-overlay" id="saveModalOverlay">
   <div class="modal">
     <h3>💾 Новое сохранение</h3>
     <p>Введите название (например: "21.07.2026" или "Понедельник")</p>
     <input type="text" id="saveNameInput" placeholder="Название..." maxlength="50">
     <div class="modal-buttons">
-      <button class="btn btn-ghost" onclick="closeSaveModal()">Отмена</button>
-      <button class="btn btn-save" onclick="createSave()">💾 Сохранить</button>
+      <button class="btn btn-ghost" id="btnCancelSave">Отмена</button>
+      <button class="btn btn-save" id="btnConfirmSave">💾 Сохранить</button>
     </div>
   </div>
 </div>
@@ -527,23 +527,14 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+  const dataRef = ref(db, 'tracker/current');
+  const savesRef = ref(db, 'tracker/saves');
 
-  window._db = db;
-  window._ref = ref;
-  window._set = set;
-  window._onValue = onValue;
-  window._remove = remove;
-  window._dataRef = ref(db, 'tracker/current');
-  window._savesRef = ref(db, 'tracker/saves');
-</script>
-
-<script>
   // ===== ДАННЫЕ =====
   let players = [];
   let nextId = 1;
   let sortCol = null;
   let sortAsc = true;
-  let dbReady = false;
 
   // ===== УТИЛИТЫ =====
   function getInitials(name) {
@@ -630,11 +621,10 @@
 
       html += '<tr>';
       html += '<td><div class="name-cell"><div class="avatar" style="background:' + getAvatarColor(p.name) + '">' + getInitials(p.name) + '</div>' + p.name + '</div></td>';
-      html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" onchange="addBottles(' + p.id + ', this.value)"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
-      html += '<td><input type="number" class="input-num input-potato" value="" placeholder="+' + p.potatoes + '" onchange="addPotatoes(' + p.id + ', this.value)"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.potatoes + '</b></div></td>';
+      html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" data-id="' + p.id + '" data-type="bottle"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
+      html += '<td><input type="number" class="input-num input-potato" value="" placeholder="+' + p.potatoes + '" data-id="' + p.id + '" data-type="potato"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.potatoes + '</b></div></td>';
       html += '<td><span class="badge badge-green">' + remain + '</span><div style="font-size:10px;color:#9ca3af;margin-top:2px;">из ' + (p.bottles + p.potatoes) + '</div></td>';
 
-      // Выдача
       html += '<td><div class="prize-line">';
       if (prize.v > 0 || prize.s > 0) {
         html += '<div class="prize-item prize-green">🟢 Винт: ' + prize.v + '</div>';
@@ -645,11 +635,10 @@
       }
       html += '</div></td>';
 
-      html += '<td><button class="delete-btn" onclick="deletePlayer(' + p.id + ')">×</button></td>';
+      html += '<td><button class="delete-btn" data-del="' + p.id + '">×</button></td>';
       html += '</tr>';
     });
 
-    // Итоговая строка
     html += '<tr class="total-row">';
     html += '<td>📊 ИТОГО</td>';
     html += '<td>🍾 ' + totalBottles + '</td>';
@@ -660,91 +649,97 @@
     html += '</tr>';
 
     tbody.innerHTML = html;
+
+    // Привязываем обработчики к динамическим элементам
+    bindInputHandlers();
+    bindDeleteHandlers();
   }
 
-  // ===== ДЕЙСТВИЯ =====
-  function addBottles(id, val) {
-    const v = parseInt(val) || 0;
-    if (v === 0) return;
-    for (let i = 0; i < players.length; i++) {
-      if (players[i].id === id) {
-        players[i].bottles += v;
-        renderTable();
-        saveCurrent();
-        return;
-      }
+  function bindInputHandlers() {
+    document.querySelectorAll('.input-num').forEach(function(input) {
+      input.addEventListener('change', function() {
+        const id = parseInt(this.getAttribute('data-id'));
+        const type = this.getAttribute('data-type');
+        const val = parseInt(this.value) || 0;
+        if (val === 0) return;
+
+        for (let i = 0; i < players.length; i++) {
+          if (players[i].id === id) {
+            if (type === 'bottle') players[i].bottles += val;
+            else players[i].potatoes += val;
+            renderTable();
+            saveCurrent();
+            return;
+          }
+        }
+      });
+    });
+  }
+
+  function bindDeleteHandlers() {
+    document.querySelectorAll('.delete-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const id = parseInt(this.getAttribute('data-del'));
+        if (confirm('Удалить игрока?')) {
+          players = players.filter(function(p) { return p.id !== id; });
+          renderTable();
+          saveCurrent();
+        }
+      });
+    });
+  }
+
+  // ===== FIREBASE: ТЕКУЩИЕ ДАННЫЕ =====
+  function saveCurrent() {
+    set(dataRef, { players: players, nextId: nextId })
+      .catch(function(err) { console.error('Ошибка сохранения:', err); });
+  }
+
+  onValue(dataRef, function(snapshot) {
+    const data = snapshot.val();
+    if (data && data.players) {
+      players = data.players;
+      nextId = data.nextId || 1;
+      renderTable();
     }
-  }
+  });
 
-  function addPotatoes(id, val) {
-    const v = parseInt(val) || 0;
-    if (v === 0) return;
-    for (let i = 0; i < players.length; i++) {
-      if (players[i].id === id) {
-        players[i].potatoes += v;
-        renderTable();
-        saveCurrent();
-        return;
-      }
-    }
-  }
-
-  function addPlayer() {
+  // ===== КНОПКИ =====
+  document.getElementById('btnAddPlayer').addEventListener('click', function() {
     const name = prompt('Введите имя и фамилию игрока:');
     if (name && name.trim()) {
       players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
       renderTable();
       saveCurrent();
     }
-  }
+  });
 
-  function deletePlayer(id) {
-    if (confirm('Удалить игрока?')) {
-      players = players.filter(function(p) { return p.id !== id; });
-      renderTable();
-      saveCurrent();
-    }
-  }
+  document.getElementById('searchInput').addEventListener('input', renderTable);
 
-  function sortTable(col) {
-    if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  document.getElementById('btnSortName').addEventListener('click', function() {
+    if (sortCol === 'name') sortAsc = !sortAsc;
+    else { sortCol = 'name'; sortAsc = true; }
     renderTable();
-  }
+  });
 
-  function clearAll() {
+  document.getElementById('btnSortTotal').addEventListener('click', function() {
+    if (sortCol === 'total') sortAsc = !sortAsc;
+    else { sortCol = 'total'; sortAsc = true; }
+    renderTable();
+  });
+
+  document.getElementById('btnClear').addEventListener('click', function() {
     if (confirm('Очистить все данные?')) {
       players = [];
       nextId = 1;
       renderTable();
       saveCurrent();
     }
-  }
+  });
 
-  // ===== FIREBASE: ТЕКУЩИЕ ДАННЫЕ =====
-  function saveCurrent() {
-    if (!dbReady || !window._set || !window._dataRef) return;
-    window._set(window._dataRef, { players: players, nextId: nextId })
-      .catch(function(err) { console.error('Ошибка сохранения:', err); });
-  }
-
-  function loadCurrent() {
-    if (!window._onValue || !window._dataRef) {
-      setTimeout(loadCurrent, 300);
-      return;
-    }
-    dbReady = true;
-    window._onValue(window._dataRef, function(snapshot) {
-      const data = snapshot.val();
-      if (data && data.players) {
-        players = data.players;
-        nextId = data.nextId || 1;
-        renderTable();
-      }
-    });
-  }
-
-  // ===== FIREBASE: СОХРАНЕНИЯ =====
-  function toggleSaveDropdown() {
+  // ===== СОХРАНЕНИЯ =====
+  document.getElementById('btnSaveDropdown').addEventListener('click', function(e) {
+    e.stopPropagation();
     const el = document.getElementById('saveDropdown');
     const isOpen = el.classList.contains('show');
     document.querySelectorAll('.dropdown-content').forEach(function(d) { d.classList.remove('show'); });
@@ -752,7 +747,7 @@
       el.classList.add('show');
       loadSavesList();
     }
-  }
+  });
 
   document.addEventListener('click', function(e) {
     if (!e.target.closest('.dropdown')) {
@@ -760,29 +755,29 @@
     }
   });
 
-  function showSaveModal() {
-    document.getElementById('saveModal').classList.add('show');
+  document.getElementById('btnNewSave').addEventListener('click', function(e) {
+    e.stopPropagation();
+    document.getElementById('saveModalOverlay').classList.add('show');
     document.getElementById('saveNameInput').value = '';
     document.getElementById('saveNameInput').focus();
     document.getElementById('saveDropdown').classList.remove('show');
-  }
+  });
 
-  function closeSaveModal() {
-    document.getElementById('saveModal').classList.remove('show');
-  }
+  document.getElementById('btnCancelSave').addEventListener('click', function() {
+    document.getElementById('saveModalOverlay').classList.remove('show');
+  });
 
-  document.getElementById('saveModal').addEventListener('click', function(e) {
-    if (e.target === this) closeSaveModal();
+  document.getElementById('saveModalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) document.getElementById('saveModalOverlay').classList.remove('show');
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeSaveModal();
+    if (e.key === 'Escape') document.getElementById('saveModalOverlay').classList.remove('show');
   });
 
-  function createSave() {
+  document.getElementById('btnConfirmSave').addEventListener('click', function() {
     const name = document.getElementById('saveNameInput').value.trim();
     if (!name) { alert('Введите название!'); return; }
-    if (!dbReady || !window._set || !window._savesRef) { alert('База данных не готова'); return; }
 
     const saveData = {
       players: players,
@@ -790,23 +785,18 @@
       createdAt: Date.now()
     };
 
-    const saveRef = window._ref(window._db, 'tracker/saves/' + name);
-    window._set(saveRef, saveData)
+    const saveRef = ref(db, 'tracker/saves/' + name);
+    set(saveRef, saveData)
       .then(function() {
-        closeSaveModal();
+        document.getElementById('saveModalOverlay').classList.remove('show');
         alert('✅ Сохранение "' + name + '" создано!');
       })
       .catch(function(err) { alert('Ошибка: ' + err.message); });
-  }
+  });
 
   function loadSavesList() {
     const container = document.getElementById('savesList');
-    if (!window._onValue || !window._savesRef) {
-      container.innerHTML = '<div class="dropdown-empty">Подключение...</div>';
-      return;
-    }
-
-    window._onValue(window._savesRef, function(snapshot) {
+    onValue(savesRef, function(snapshot) {
       const data = snapshot.val();
       if (!data) {
         container.innerHTML = '<div class="dropdown-empty">📭 Нет сохранений</div>';
@@ -821,49 +811,46 @@
       saves.forEach(function(s) {
         const date = s.createdAt ? new Date(s.createdAt).toLocaleString('ru-RU') : '';
         html += '<div class="dropdown-item">';
-        html += '<span class="save-name" onclick="loadSave('' + s.name + '')">📁 ' + s.name + '<span class="save-date">' + date + ' • ' + s.count + ' игроков</span></span>';
-        html += '<button class="del-save" onclick="deleteSave('' + s.name + '')">🗑️</button>';
+        html += '<span class="save-name" data-load="' + s.name + '">📁 ' + s.name + '<span class="save-date">' + date + ' • ' + s.count + ' игроков</span></span>';
+        html += '<button class="del-save" data-delete="' + s.name + '">🗑️</button>';
         html += '</div>';
       });
 
       container.innerHTML = html;
+
+      // Привязываем обработчики
+      document.querySelectorAll('[data-load]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          const name = this.getAttribute('data-load');
+          if (!confirm('Загрузить сохранение "' + name + '"? Текущие данные будут заменены.')) return;
+          const loadRef = ref(db, 'tracker/saves/' + name);
+          onValue(loadRef, function(snap) {
+            const data = snap.val();
+            if (data && data.players) {
+              players = data.players;
+              nextId = data.nextId || 1;
+              renderTable();
+              saveCurrent();
+              alert('✅ Загружено сохранение "' + name + '"');
+            }
+          }, { onlyOnce: true });
+          document.getElementById('saveDropdown').classList.remove('show');
+        });
+      });
+
+      document.querySelectorAll('[data-delete]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const name = this.getAttribute('data-delete');
+          if (!confirm('Удалить сохранение "' + name + '"?')) return;
+          const delRef = ref(db, 'tracker/saves/' + name);
+          remove(delRef).then(function() { loadSavesList(); });
+        });
+      });
     }, { onlyOnce: true });
-  }
-
-  function loadSave(name) {
-    if (!confirm('Загрузить сохранение "' + name + '"? Текущие данные будут заменены.')) return;
-    if (!window._onValue || !window._db) return;
-
-    const saveRef = window._ref(window._db, 'tracker/saves/' + name);
-    window._onValue(saveRef, function(snapshot) {
-      const data = snapshot.val();
-      if (data && data.players) {
-        players = data.players;
-        nextId = data.nextId || 1;
-        renderTable();
-        saveCurrent();
-        alert('✅ Загружено сохранение "' + name + '"');
-      }
-    }, { onlyOnce: true });
-
-    document.getElementById('saveDropdown').classList.remove('show');
-  }
-
-  function deleteSave(name) {
-    if (!confirm('Удалить сохранение "' + name + '"?')) return;
-    if (!window._remove || !window._db) return;
-
-    const saveRef = window._ref(window._db, 'tracker/saves/' + name);
-    window._remove(saveRef)
-      .then(function() { loadSavesList(); })
-      .catch(function(err) { alert('Ошибка: ' + err.message); });
   }
 
   // ===== ЗАПУСК =====
-  window.addEventListener('load', function() {
-    setTimeout(loadCurrent, 500);
-  });
-
   renderTable();
 </script>
 
