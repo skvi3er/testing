@@ -9,41 +9,42 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* ===== ТЁМНЫЙ ФОН С ЧЁРНЫМИ РОЗАМИ ===== */
+  /* ==========================================
+     ТЁМНЫЙ ФОН С РОЗАМИ (силуэты)
+     ========================================== */
   body {
     font-family: system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     padding: 20px;
-    background: #0d0d0d;
-    background-image:
-      /* Розы — 5 штук в разных местах */
-      radial-gradient(circle at 10% 20%, rgba(20, 20, 20, 0.9) 0%, transparent 35%),
-      radial-gradient(circle at 85% 75%, rgba(20, 20, 20, 0.9) 0%, transparent 35%),
-      radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0.7) 0%, transparent 50%),
-      radial-gradient(circle at 5% 90%, rgba(20, 20, 20, 0.8) 0%, transparent 30%),
-      radial-gradient(circle at 92% 10%, rgba(20, 20, 20, 0.8) 0%, transparent 30%),
-      /* Текстурный шум */
-      repeating-linear-gradient(45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 2px, transparent 2px, transparent 4px),
-      repeating-linear-gradient(-45deg, rgba(255,255,255,0.01) 0px, rgba(255,255,255,0.01) 2px, transparent 2px, transparent 4px),
-      /* Градиент для глубины */
-      radial-gradient(ellipse at 30% 40%, rgba(30, 20, 20, 0.6) 0%, transparent 60%),
-      radial-gradient(ellipse at 70% 60%, rgba(20, 10, 30, 0.5) 0%, transparent 50%),
-      #0a0a0a;
-    background-blend-mode: overlay, overlay, normal, normal, normal, normal;
+    background: #0a0a0a;
     color: #e5e7eb;
+    /* Розы через SVG-маски */
+    background-image:
+      /* Роза 1 — левый верх */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cpath d='M100 20 C80 40 40 50 30 80 C20 110 40 140 60 150 C80 160 100 150 100 140 C100 150 120 160 140 150 C160 140 180 110 170 80 C160 50 120 40 100 20Z' fill='rgba(30,15,20,0.3)'/%3E%3Cpath d='M100 30 C85 45 55 55 45 75 C35 95 50 120 65 130 C80 140 95 135 100 125 C105 135 120 140 135 130 C150 120 165 95 155 75 C145 55 115 45 100 30Z' fill='rgba(40,20,30,0.2)'/%3E%3C/svg%3E") no-repeat 5% 10%,
+      /* Роза 2 — правый верх */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250' viewBox='0 0 250 250'%3E%3Cpath d='M125 25 C100 50 50 65 38 100 C25 135 50 175 75 188 C100 200 125 188 125 175 C125 188 150 200 175 188 C200 175 225 135 212 100 C200 65 150 50 125 25Z' fill='rgba(30,15,20,0.25)'/%3E%3Cpath d='M125 40 C105 60 65 75 55 100 C45 125 60 150 80 160 C95 170 115 160 125 150 C135 160 155 170 170 160 C190 150 205 125 195 100 C185 75 145 60 125 40Z' fill='rgba(40,20,30,0.2)'/%3E%3C/svg%3E") no-repeat 88% 5%,
+      /* Роза 3 — центр (большая) */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cpath d='M200 40 C160 80 80 100 60 160 C40 220 80 280 120 300 C160 320 200 300 200 280 C200 300 240 320 280 300 C320 280 360 220 340 160 C320 100 240 80 200 40Z' fill='rgba(25,12,18,0.15)'/%3E%3Cpath d='M200 60 C165 95 95 115 75 165 C55 215 90 265 130 280 C160 292 190 280 200 265 C210 280 240 292 270 280 C310 265 345 215 325 165 C305 115 235 95 200 60Z' fill='rgba(35,18,25,0.12)'/%3E%3C/svg%3E") no-repeat 50% 45%,
+      /* Роза 4 — левый низ */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cpath d='M110 22 C88 44 44 55 33 88 C22 121 44 154 66 165 C88 176 110 165 110 154 C110 165 132 176 154 165 C176 154 198 121 187 88 C176 55 132 44 110 22Z' fill='rgba(30,15,20,0.2)'/%3E%3C/svg%3E") no-repeat 2% 85%,
+      /* Роза 5 — правый низ */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cpath d='M90 18 C72 36 36 45 27 72 C18 99 36 126 54 135 C72 144 90 135 90 126 C90 135 108 144 126 135 C144 126 162 99 153 72 C144 45 108 36 90 18Z' fill='rgba(30,15,20,0.2)'/%3E%3C/svg%3E") no-repeat 92% 88%,
+      /* Тёмный градиент поверх */
+      radial-gradient(ellipse at 30% 40%, rgba(20,10,15,0.4) 0%, transparent 70%),
+      radial-gradient(ellipse at 70% 60%, rgba(10,5,20,0.4) 0%, transparent 70%),
+      #0a0a0a;
+    background-blend-mode: overlay, overlay, overlay, overlay, overlay, normal, normal, normal;
+    background-size: auto, auto, auto, auto, auto, 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
   }
 
-  /* Улучшаем читаемость текста */
   .container { max-width: 1200px; margin: 0 auto; }
 
   /* ===== ЗАГОЛОВОК ===== */
   .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
   .header-left { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
-  .header-left h1 {
-    font-size: 24px;
-    color: #e5e7eb;
-    text-shadow: 0 0 20px rgba(59, 130, 246, 0.15);
-  }
+  .header-left h1 { font-size: 24px; color: #e5e7eb; text-shadow: 0 0 20px rgba(59,130,246,0.15); }
   .brand {
     font-size: 32px;
     font-weight: 900;
@@ -51,20 +52,19 @@
     background: linear-gradient(135deg, #f59e0b, #d97706, #f59e0b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 40px rgba(245, 158, 11, 0.15);
+    text-shadow: 0 0 40px rgba(245,158,11,0.15);
   }
 
   /* ===== СТАТИСТИКА ===== */
   .stats { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 12px 20px;
     border-radius: 10px;
     min-width: 120px;
     border-left: 3px solid #3b82f6;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.05);
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   }
   .stat-label { font-size: 11px; color: #9ca3af; text-transform: uppercase; }
@@ -72,9 +72,8 @@
 
   /* ===== СТАТУС ===== */
   .status {
-    background: rgba(30, 58, 138, 0.25);
+    background: rgba(30,58,138,0.2);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 10px 16px;
     border-radius: 8px;
     margin-bottom: 16px;
@@ -83,7 +82,7 @@
     gap: 10px;
     font-size: 14px;
     color: #93bbfc;
-    border: 1px solid rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59,130,246,0.1);
   }
   .dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
   .dot.offline { background: #ef4444; animation: none; }
@@ -91,9 +90,8 @@
 
   /* ===== ПАНЕЛЬ ИНСТРУМЕНТОВ ===== */
   .toolbar {
-    background: rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.05);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 12px 16px;
     border-radius: 10px 10px 0 0;
     display: flex;
@@ -101,12 +99,11 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.05);
     border-bottom: none;
   }
 
-  /* ===== ТАБЛИЦА — СЕРЫЙ ФОН ===== */
+  /* ===== ТАБЛИЦА ===== */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -117,20 +114,19 @@
   }
 
   th {
-    background: rgba(60, 60, 65, 0.9);
+    background: rgba(60,60,65,0.9);
     padding: 12px 16px;
     text-align: left;
     font-size: 12px;
     text-transform: uppercase;
     color: #9ca3af;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     font-weight: 600;
-    letter-spacing: 0.5px;
   }
 
   td {
     padding: 10px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
     vertical-align: middle;
     color: #d1d5db;
   }
@@ -138,11 +134,7 @@
   tr:nth-child(even) { background: rgba(255,255,255,0.02); }
   tr:nth-child(even):hover { background: rgba(255,255,255,0.05); }
 
-  .total-row {
-    background: rgba(50, 50, 55, 0.9) !important;
-    font-weight: 700;
-    border-top: 2px solid rgba(255,255,255,0.08);
-  }
+  .total-row { background: rgba(50,50,55,0.9) !important; font-weight: 700; border-top: 2px solid rgba(255,255,255,0.08); }
   .total-row td { color: #f3f4f6; }
 
   /* ===== КНОПКИ ===== */
@@ -172,7 +164,7 @@
     top: 100%;
     left: 0;
     background: #1a1a1e;
-    min-width: 240px;
+    min-width: 220px;
     border-radius: 8px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
     z-index: 100;
@@ -180,7 +172,7 @@
     margin-top: 4px;
     max-height: 350px;
     overflow-y: auto;
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.05);
   }
   .dropdown-content.show { display: block; }
   .dropdown-content .dropdown-item {
@@ -286,11 +278,10 @@
 
   /* ===== ПОДВАЛ ===== */
   .footer {
-    background: rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.03);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     padding: 10px 16px;
-    border-top: 1px solid rgba(255,255,255,0.04);
+    border-top: 1px solid rgba(255,255,255,0.03);
     font-size: 12px;
     color: #6b7280;
     border-radius: 0 0 10px 10px;
@@ -298,7 +289,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
-    border: 1px solid rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.03);
     border-top: none;
   }
 
@@ -312,7 +303,7 @@
     max-width: 420px;
     width: 90%;
     box-shadow: 0 24px 48px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.05);
   }
   .modal h3 { margin-bottom: 16px; font-size: 20px; color: #e5e7eb; }
   .modal p { color: #9ca3af; }
@@ -486,24 +477,34 @@ function saveToFirebase() {
 
 function loadFromFirebase() {
   updateStatus(false, '🔄 Подключение...');
+
   dbRef.on('value', snap => {
     const data = snap.val();
+
     if (data && data.players !== undefined) {
       players = data.players || [];
       nextId = data.nextId || 1;
       updateStatus(true, '☁️ Синхронизировано');
     } else {
+      // Первый запуск — создаём игрока
       if (!dataLoaded) {
         players = [
           { id: 1, name: "Честер Курил", amount: 100 }
         ];
         nextId = 2;
-        setTimeout(saveToFirebase, 500);
         dataLoaded = true;
+        // Сохраняем в Firebase
+        setTimeout(saveToFirebase, 300);
+      } else {
+        players = [];
+        nextId = 1;
       }
     }
     renderTable();
-  }, () => updateStatus(false, '⚠️ Ошибка соединения'));
+  }, error => {
+    console.error('Ошибка Firebase:', error);
+    updateStatus(false, '⚠️ Ошибка соединения');
+  });
 }
 
 // ==========================================
@@ -614,137 +615,4 @@ function loadBackup(name) {
     });
 }
 
-function deleteBackup(name) {
-  if (!confirm(`Удалить сохранение "${name}"?`)) return;
-
-  backupsRef.child(name).remove()
-    .then(() => {
-      showNotification('🗑️ Сохранение "' + name + '" удалено');
-      loadBackupsList();
-    })
-    .catch(err => {
-      alert('Ошибка удаления: ' + err.message);
-    });
-}
-
-// ==========================================
-// 🎨 АВАТАРКИ
-// ==========================================
-
-function getAvatarColors(name) {
-  const colors = ['#667eea','#f093fb','#4facfe','#43e97b','#fa709a','#30cfd0','#ff9a9e','#84fab0'];
-  let hash = 0;
-  for (let c of name) hash = name.charCodeAt(0) + ((hash << 5) - hash);
-  return colors[Math.abs(hash) % colors.length];
-}
-
-function getInitials(name) {
-  const parts = name.split(' ');
-  return (parts[0]?parts[0][0]:'') + (parts[1]?parts[1][0]:'');
-}
-
-function getTop3Ids(data) {
-  const sorted = [...data].sort((a, b) => {
-    if (b.amount !== a.amount) return b.amount - a.amount;
-    return a.id - b.id;
-  });
-  return sorted.slice(0, 3).map(p => p.id);
-}
-
-function getAvatarHtml(player, isTop) {
-  if (isTop === 1) {
-    return `<div class="avatar gold">🥇</div>`;
-  } else if (isTop === 2) {
-    return `<div class="avatar silver">🥈</div>`;
-  } else if (isTop === 3) {
-    return `<div class="avatar bronze">🥉</div>`;
-  } else {
-    const color = getAvatarColors(player.name);
-    return `<div class="avatar" style="background:${color}">${getInitials(player.name)}</div>`;
-  }
-}
-
-// ==========================================
-// 📊 СОРТИРОВКА
-// ==========================================
-
-function toggleDropdown(id) {
-  const el = document.getElementById(id);
-  el.classList.toggle('show');
-}
-
-document.addEventListener('click', function(e) {
-  document.querySelectorAll('.dropdown').forEach(d => {
-    if (!d.contains(e.target)) {
-      d.querySelector('.dropdown-content')?.classList.remove('show');
-    }
-  });
-});
-
-function applySort(type) {
-  currentSort = type;
-  document.getElementById('sortDropdown').classList.remove('show');
-  renderTable();
-}
-
-function getSortedPlayers() {
-  let data = [...players];
-
-  if (currentSort === 'top') {
-    data.sort((a, b) => {
-      if (b.amount !== a.amount) return b.amount - a.amount;
-      return a.id - b.id;
-    });
-  } else if (currentSort === 'name') {
-    data.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-  } else {
-    data.sort((a, b) => a.id - b.id);
-  }
-
-  return data;
-}
-
-// ==========================================
-// ✏️ РЕДАКТИРОВАНИЕ ИМЕНИ
-// ==========================================
-
-function startEditName(id) {
-  editingNameId = id;
-  renderTable();
-}
-
-function saveName(id, input) {
-  const newName = input.value.trim();
-  if (!newName) {
-    alert('Имя не может быть пустым!');
-    return;
-  }
-  const p = players.find(p => p.id === id);
-  if (p) {
-    p.name = newName;
-    editingNameId = null;
-    renderTable();
-    saveToFirebase();
-  }
-}
-
-function cancelEditName() {
-  editingNameId = null;
-  renderTable();
-}
-
-// ==========================================
-// 🖼️ ОТРИСОВКА ТАБЛИЦЫ
-// ==========================================
-
-function showNotification(text) {
-  const statusText = document.getElementById('statusText');
-  const originalText = statusText.textContent;
-  statusText.textContent = text;
-  setTimeout(() => {
-    statusText.textContent = originalText;
-  }, 3000);
-}
-
-function renderTable() {
-  const search = document
+function delete
