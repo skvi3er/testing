@@ -4,9 +4,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📦 Трекер сдачи продукции — Бутылки + Картошка</title>
+<title>📦 Трекер сдачи продукции — BLACK-ROSE</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
   :root {
     --bg: #f0f2f5;
@@ -23,6 +23,36 @@
     --amber-light: #fffbeb;
     --radius: 14px;
     --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --input-bg: #ffffff;
+    --hover-bg: #f8fafc;
+    --even-bg: #fafbfc;
+    --th-bg: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    --total-bg: linear-gradient(to right, #f8fafc, #f1f5f9);
+    --footer-bg: #fafbfc;
+    --modal-bg: rgba(0,0,0,0.6);
+  }
+
+  body.dark-mode {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --border: #334155;
+    --accent: #60a5fa;
+    --green: #34d399;
+    --green-light: rgba(52,211,153,0.15);
+    --red: #f87171;
+    --red-light: rgba(248,113,113,0.15);
+    --amber: #fbbf24;
+    --amber-light: rgba(251,191,36,0.15);
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.2);
+    --input-bg: #0f172a;
+    --hover-bg: #1e293b;
+    --even-bg: #1a2234;
+    --th-bg: linear-gradient(to bottom, #1e293b, #0f172a);
+    --total-bg: linear-gradient(to right, #1e293b, #0f172a);
+    --footer-bg: #1e293b;
+    --modal-bg: rgba(0,0,0,0.8);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,9 +63,100 @@
     min-height: 100vh;
     padding: 20px;
     color: var(--text);
+    transition: background 0.3s, color 0.3s;
   }
 
+  body.view-only .admin-hide { display: none !important; }
+  body.view-only .input-num { background: #f3f4f6 !important; color: #9ca3af !important; border-color: #e5e7eb !important; cursor: not-allowed !important; pointer-events: none; }
+  body.dark-mode.view-only .input-num { background: #1e293b !important; color: #475569 !important; border-color: #334155 !important; }
+  body.view-only .delete-btn { display: none !important; }
+  body.view-only .btn-primary { display: none !important; }
+  body.view-only .btn-danger { display: none !important; }
+  body.view-only .btn-save { display: none !important; }
+
   .container { max-width: 1200px; margin: 0 auto; }
+
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .theme-toggle:hover { transform: scale(1.05); }
+
+  .brand {
+    text-align: center;
+    margin-bottom: 20px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .brand h1 {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 6px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #3b82f6 50%, #1a1a2e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+    line-height: 1.1;
+  }
+
+  body.dark-mode .brand h1 {
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .mode-indicator {
+    text-align: center;
+    margin-bottom: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .mode-indicator .view-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card);
+    color: var(--muted);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .mode-indicator .edit-badge {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-light);
+    color: var(--green);
+    padding: 4px 14px;
+    border-radius: 20px;
+  }
+
+  body.admin-mode .mode-indicator .view-badge { display: none; }
+  body.admin-mode .mode-indicator .edit-badge { display: inline-flex; }
 
   .header {
     display: flex;
@@ -46,13 +167,13 @@
     margin-bottom: 20px;
   }
 
-  .header h1 {
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+  .header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
   }
 
-  .header h1 span { font-weight: 400; color: var(--muted); font-size: 16px; display: block; margin-top: 2px; }
+  .header h2 span { font-weight: 400; color: var(--muted); font-size: 14px; display: block; margin-top: 2px; }
 
   .stats-grid {
     display: grid;
@@ -68,6 +189,7 @@
     box-shadow: var(--shadow);
     border: 1px solid var(--border);
     text-align: center;
+    transition: background 0.3s, border-color 0.3s;
   }
 
   .stat-card .icon { font-size: 28px; margin-bottom: 6px; }
@@ -92,6 +214,7 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
+    transition: background 0.3s, border-color 0.3s;
   }
 
   .btn {
@@ -107,14 +230,16 @@
 
   .btn-primary { background: var(--accent); color: white; }
   .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
-  .btn-ghost { background: #f3f4f6; color: var(--text); }
-  .btn-ghost:hover { background: #e5e7eb; }
+  .btn-ghost { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--hover-bg); }
   .btn-danger { background: var(--red); color: white; }
   .btn-danger:hover { background: #dc2626; }
   .btn-save { background: var(--green); color: white; }
   .btn-save:hover { background: #059669; }
   .btn-load { background: var(--amber); color: white; }
   .btn-load:hover { background: #d97706; }
+  .btn-top { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #1a1a2e; }
+  .btn-top:hover { transform: translateY(-1px); }
 
   .search-box {
     position: relative;
@@ -128,6 +253,9 @@
     width: 200px;
     outline: none;
     font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
   }
 
   .search-box::before {
@@ -150,7 +278,7 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: var(--card);
     min-width: 260px;
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -160,6 +288,7 @@
     max-height: 350px;
     overflow-y: auto;
     border: 1px solid var(--border);
+    transition: background 0.3s, border-color 0.3s;
   }
 
   .dropdown-content.show { display: block; }
@@ -180,7 +309,7 @@
     font-family: inherit;
   }
 
-  .dropdown-item:hover { background: #f3f4f6; }
+  .dropdown-item:hover { background: var(--hover-bg); }
   .dropdown-item .save-name { flex: 1; }
   .dropdown-item .save-date { font-size: 11px; color: var(--muted); display: block; }
   .dropdown-item .del-save { margin-left: 10px; color: #9ca3af; cursor: pointer; background: none; border: none; font-size: 14px; }
@@ -194,6 +323,12 @@
     font-weight: 600;
   }
   .dropdown-new:hover { background: #bfdbfe; }
+
+  body.dark-mode .dropdown-new {
+    background: rgba(59,130,246,0.2);
+    color: #60a5fa;
+  }
+  body.dark-mode .dropdown-new:hover { background: rgba(59,130,246,0.3); }
 
   .dropdown-empty {
     padding: 20px;
@@ -209,10 +344,11 @@
     border: 1px solid var(--border);
     border-top: none;
     font-size: 13px;
+    transition: background 0.3s, border-color 0.3s;
   }
 
   thead th {
-    background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    background: var(--th-bg);
     padding: 12px 10px;
     text-align: center;
     font-size: 11px;
@@ -222,7 +358,10 @@
     letter-spacing: 0.5px;
     border-bottom: 2px solid #e2e8f0;
     white-space: nowrap;
+    transition: background 0.3s;
   }
+
+  body.dark-mode thead th { color: #94a3b8; border-bottom-color: #334155; }
 
   thead th:first-child { text-align: left; padding-left: 16px; }
 
@@ -231,14 +370,17 @@
     text-align: center;
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
+    transition: border-color 0.3s;
   }
+
+  body.dark-mode td { border-bottom-color: #334155; }
 
   td:first-child { text-align: left; padding-left: 16px; }
 
   tbody tr { transition: background 0.15s; }
-  tbody tr:hover { background: #f8fafc; }
-  tbody tr:nth-child(even) { background: #fafbfc; }
-  tbody tr:nth-child(even):hover { background: #f1f5f9; }
+  tbody tr:hover { background: var(--hover-bg); }
+  tbody tr:nth-child(even) { background: var(--even-bg); }
+  tbody tr:nth-child(even):hover { background: var(--hover-bg); }
 
   .name-cell {
     display: flex;
@@ -260,6 +402,10 @@
     flex-shrink: 0;
   }
 
+  .avatar.gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); box-shadow: 0 2px 8px rgba(245,158,11,0.4); font-size: 16px; }
+  .avatar.silver { background: linear-gradient(135deg, #9ca3af, #d1d5db); box-shadow: 0 2px 8px rgba(156,163,175,0.4); font-size: 16px; }
+  .avatar.bronze { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 2px 8px rgba(217,119,6,0.4); font-size: 16px; }
+
   .input-num {
     width: 70px;
     padding: 5px 8px;
@@ -271,11 +417,15 @@
     font-family: inherit;
     outline: none;
     transition: all 0.2s;
+    background: var(--input-bg);
+    color: var(--text);
   }
 
-  .input-bottle { background: #eff6ff; color: #3b82f6; border-color: #bfdbfe; }
+  .input-bottle { border-color: #bfdbfe; }
+  body.dark-mode .input-bottle { border-color: rgba(59,130,246,0.3); }
   .input-bottle:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-  .input-potato { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+  .input-potato { border-color: #fde68a; }
+  body.dark-mode .input-potato { border-color: rgba(245,158,11,0.3); }
   .input-potato:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
 
   .badge {
@@ -289,11 +439,13 @@
   }
 
   .badge-blue { background: #eff6ff; color: #3b82f6; }
+  body.dark-mode .badge-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
   .badge-green { background: var(--green-light); color: var(--green); }
   .badge-red { background: var(--red-light); color: var(--red); }
   .badge-amber { background: var(--amber-light); color: #b45309; }
+  body.dark-mode .badge-amber { background: rgba(251,191,36,0.15); color: #fbbf24; }
   .badge-gray { background: #f3f4f6; color: #9ca3af; }
-  .badge-purple { background: #f5f3ff; color: #8b5cf6; }
+  body.dark-mode .badge-gray { background: rgba(148,163,184,0.15); color: #94a3b8; }
 
   .prize-line {
     display: flex;
@@ -314,10 +466,12 @@
   .prize-red { color: var(--red); }
 
   .total-row {
-    background: linear-gradient(to right, #f8fafc, #f1f5f9) !important;
+    background: var(--total-bg) !important;
     font-weight: 700;
     border-top: 2px solid #e2e8f0;
   }
+
+  body.dark-mode .total-row { border-top-color: #334155; }
 
   .total-row td { padding: 14px 10px; font-size: 14px; }
 
@@ -337,7 +491,7 @@
   .delete-btn:hover { color: var(--red); background: var(--red-light); }
 
   .footer-bar {
-    background: #fafbfc;
+    background: var(--footer-bg);
     padding: 12px 20px;
     border: 1px solid var(--border);
     border-top: none;
@@ -348,6 +502,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 8px;
+    transition: background 0.3s;
   }
 
   .legend { display: flex; gap: 16px; flex-wrap: wrap; }
@@ -362,12 +517,156 @@
     margin-top: 2px;
   }
 
+  /* ===== ТОП ФАРМИЛОВ ===== */
+  .top-panel {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .top-panel.show { display: block; }
+
+  .top-panel h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .top-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .top-card {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid var(--border);
+  }
+
+  .top-card .place {
+    font-size: 28px;
+    font-weight: 900;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .top-card .place-1 { background: linear-gradient(135deg, #f59e0b, #fbbf24); color: white; box-shadow: 0 4px 12px rgba(245,158,11,0.3); }
+  .top-card .place-2 { background: linear-gradient(135deg, #9ca3af, #d1d5db); color: white; box-shadow: 0 4px 12px rgba(156,163,175,0.3); }
+  .top-card .place-3 { background: linear-gradient(135deg, #d97706, #f59e0b); color: white; box-shadow: 0 4px 12px rgba(217,119,6,0.3); }
+  .top-card .place-other { background: var(--card); color: var(--muted); border: 2px solid var(--border); font-size: 20px; }
+
+  .top-card .info { flex: 1; }
+  .top-card .info .name { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+  .top-card .info .stats { font-size: 12px; color: var(--muted); }
+  .top-card .info .prize { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .top-card .info .prize .v { color: var(--green); }
+  .top-card .info .prize .s { color: var(--red); }
+
+  /* ===== АДМИН МОДАЛЬНОЕ ОКНО ===== */
+  .admin-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: var(--modal-bg);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .admin-overlay.show { display: flex; }
+
+  .admin-box {
+    background: var(--card);
+    padding: 36px 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+  }
+
+  .admin-box h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  .admin-box p {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .admin-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border 0.2s;
+    font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text);
+  }
+
+  .admin-box input:focus { border-color: var(--accent); }
+
+  .admin-box .admin-error {
+    color: var(--red);
+    font-size: 13px;
+    margin-bottom: 12px;
+    min-height: 20px;
+  }
+
+  .admin-box .admin-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .admin-box .admin-btn {
+    padding: 10px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .admin-box .admin-btn-enter { background: var(--accent); color: white; }
+  .admin-box .admin-btn-enter:hover { background: #2563eb; }
+  .admin-box .admin-btn-cancel { background: var(--card); color: var(--text); border: 1px solid var(--border); }
+  .admin-box .admin-btn-cancel:hover { background: var(--hover-bg); }
+
   .modal-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: var(--modal-bg);
     z-index: 200;
     justify-content: center;
     align-items: center;
@@ -376,12 +675,13 @@
   .modal-overlay.show { display: flex; }
 
   .modal {
-    background: white;
+    background: var(--card);
     padding: 28px;
     border-radius: 16px;
     max-width: 400px;
     width: 90%;
     box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+    border: 1px solid var(--border);
   }
 
   .modal h3 { margin-bottom: 12px; font-size: 20px; }
@@ -395,6 +695,8 @@
     margin-bottom: 16px;
     outline: none;
     font-family: inherit;
+    background: var(--input-bg);
+    color: var(--text);
   }
   .modal input:focus { border-color: var(--accent); }
   .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
@@ -402,20 +704,57 @@
 
   @media (max-width: 768px) {
     body { padding: 10px; }
-    .header h1 { font-size: 20px; }
+    .brand h1 { font-size: 36px; letter-spacing: 3px; }
+    .header h2 { font-size: 18px; }
     th, td { padding: 8px 6px; font-size: 11px; }
     .input-num { width: 55px; padding: 4px 6px; }
     .toolbar { flex-direction: column; align-items: stretch; }
     .dropdown-content { right: 0; left: auto; min-width: 200px; }
+    .top-grid { grid-template-columns: 1fr; }
   }
 </style>
 <base target="_blank">
 </head>
-<body>
+<body class="view-only">
+
+<!-- АДМИН МОДАЛЬНОЕ ОКНО -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-box">
+    <h2>🔐</h2>
+    <p>Введите пароль для редактирования</p>
+    <div class="admin-error" id="adminError"></div>
+    <input type="password" id="adminPassword" placeholder="••••" maxlength="10">
+    <div class="admin-buttons">
+      <button class="admin-btn admin-btn-cancel" id="btnAdminCancel">Отмена</button>
+      <button class="admin-btn admin-btn-enter" id="btnAdminEnter">Войти</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
+  <!-- Тема -->
+  <div class="top-bar">
+    <button class="theme-toggle" id="btnTheme" title="Переключить тему">🌙 Тёмная</button>
+  </div>
+
+  <!-- BLACK-ROSE -->
+  <div class="brand" id="brandLogo">
+    <h1>BLACK-ROSE</h1>
+  </div>
+
+  <div class="mode-indicator">
+    <span class="view-badge">👁️ Режим просмотра</span>
+    <span class="edit-badge">🔓 Режим редактирования</span>
+  </div>
+
   <div class="header">
-    <h1>📦 Трекер сдачи продукции <span>Бутылки 🍾 + Картошка 🥔 = Выдача пачек</span></h1>
+    <h2>📦 Трекер сдачи продукции <span>Бутылки 🍾 + Картошка 🥔 = Выдача пачек</span></h2>
+  </div>
+
+  <!-- ТОП ФАРМИЛОВ -->
+  <div class="top-panel" id="topPanel">
+    <h3>🏆 Топ фармилов</h3>
+    <div class="top-grid" id="topGrid"></div>
   </div>
 
   <div class="stats-grid">
@@ -444,22 +783,23 @@
       <div class="icon">🎁</div>
       <div class="label">Выдача</div>
       <div class="value" id="statPrize">0</div>
-      <div class="sub">винт + спас</div>
+      <div class="sub">от остатка 40%</div>
     </div>
   </div>
 
   <div class="toolbar">
     <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-      <button class="btn btn-primary" id="btnAddPlayer">➕ Добавить игрока</button>
+      <button class="btn btn-primary admin-hide" id="btnAddPlayer">➕ Добавить игрока</button>
       <div class="search-box">
         <input type="text" id="searchInput" placeholder="Поиск...">
       </div>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-top" id="btnToggleTop">🏆 Топ</button>
       <button class="btn btn-ghost" id="btnSortName">🔤 По имени</button>
       <button class="btn btn-ghost" id="btnSortTotal">📊 По сумме</button>
 
-      <div class="dropdown">
+      <div class="dropdown admin-hide">
         <button class="btn btn-save" id="btnSaveDropdown">💾 Сохранение ▼</button>
         <div class="dropdown-content" id="saveDropdown">
           <button class="dropdown-item dropdown-new" id="btnNewSave">📝 Новое сохранение</button>
@@ -470,7 +810,7 @@
         </div>
       </div>
 
-      <button class="btn btn-danger" id="btnClear">🗑️ Очистить</button>
+      <button class="btn btn-danger admin-hide" id="btnClear">🗑️ Очистить</button>
     </div>
   </div>
 
@@ -481,8 +821,8 @@
         <th>🍾 Бутылки<br><span class="formula-note">ввод сюда → суммируется</span></th>
         <th>🥔 Картошка<br><span class="formula-note">ввод сюда → суммируется</span></th>
         <th>📊 Накоплено<br><span class="formula-note">-60% от суммы</span></th>
-        <th>🎁 Выдача<br><span class="formula-note">бут: 100=2в/4с | карт: 100=1в/2с</span></th>
-        <th style="width:40px"></th>
+        <th>🎁 Выдача<br><span class="formula-note">от остатка (40%)</span></th>
+        <th class="admin-hide" style="width:40px"></th>
       </tr>
     </thead>
     <tbody id="tableBody"></tbody>
@@ -493,7 +833,7 @@
       <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> 🍾 Бутылки — суммируется</div>
       <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> 🥔 Картошка — суммируется</div>
       <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 📊 Накоплено = (бут+карт) × 0.4</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> 🎁 Выдача по формулам 100 ед.</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> 🎁 Выдача от остатка (40%)</div>
     </div>
     <span id="rowCount">0 игроков</span>
   </div>
@@ -530,11 +870,90 @@
   const dataRef = ref(db, 'tracker/current');
   const savesRef = ref(db, 'tracker/saves');
 
+  // ===== АДМИНКА =====
+  const ADMIN_PASSWORD = '1290';
+  let isAdmin = false;
+  let brandClickCount = 0;
+  let brandClickTimer = null;
+
+  function showAdminModal() {
+    document.getElementById('adminOverlay').classList.add('show');
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminError').textContent = '';
+    document.getElementById('adminPassword').focus();
+  }
+
+  function hideAdminModal() {
+    document.getElementById('adminOverlay').classList.remove('show');
+  }
+
+  function enterAdmin() {
+    const pass = document.getElementById('adminPassword').value;
+    if (pass === ADMIN_PASSWORD) {
+      isAdmin = true;
+      hideAdminModal();
+      document.body.classList.remove('view-only');
+      document.body.classList.add('admin-mode');
+      renderTable();
+    } else {
+      document.getElementById('adminError').textContent = '❌ Неверный пароль';
+      document.getElementById('adminPassword').value = '';
+      document.getElementById('adminPassword').focus();
+    }
+  }
+
+  function exitAdmin() {
+    isAdmin = false;
+    document.body.classList.add('view-only');
+    document.body.classList.remove('admin-mode');
+    renderTable();
+  }
+
+  document.getElementById('brandLogo').addEventListener('click', function() {
+    brandClickCount++;
+    clearTimeout(brandClickTimer);
+    brandClickTimer = setTimeout(function() { brandClickCount = 0; }, 600);
+    if (brandClickCount >= 3) {
+      brandClickCount = 0;
+      if (isAdmin) { exitAdmin(); } else { showAdminModal(); }
+    }
+  });
+
+  document.getElementById('btnAdminEnter').addEventListener('click', enterAdmin);
+  document.getElementById('btnAdminCancel').addEventListener('click', hideAdminModal);
+  document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') enterAdmin();
+    if (e.key === 'Escape') hideAdminModal();
+  });
+
+  // ===== ТЕМА =====
+  let isDark = false;
+
+  function loadTheme() {
+    const saved = localStorage.getItem('br-theme');
+    if (saved === 'dark') { isDark = true; document.body.classList.add('dark-mode'); updateThemeBtn(); }
+  }
+
+  function toggleTheme() {
+    isDark = !isDark;
+    if (isDark) { document.body.classList.add('dark-mode'); localStorage.setItem('br-theme', 'dark'); }
+    else { document.body.classList.remove('dark-mode'); localStorage.setItem('br-theme', 'light'); }
+    updateThemeBtn();
+  }
+
+  function updateThemeBtn() {
+    document.getElementById('btnTheme').textContent = isDark ? '☀️ Светлая' : '🌙 Тёмная';
+  }
+
+  document.getElementById('btnTheme').addEventListener('click', toggleTheme);
+  loadTheme();
+
   // ===== ДАННЫЕ =====
   let players = [];
   let nextId = 1;
   let sortCol = null;
   let sortAsc = true;
+  let topVisible = false;
 
   // ===== УТИЛИТЫ =====
   function getInitials(name) {
@@ -554,20 +973,18 @@
     return Math.floor((bottles + potatoes) * 0.4);
   }
 
-  function calcPrizeBottles(bottles) {
-    const hundreds = Math.floor(bottles / 100);
-    return { v: hundreds * 2, s: hundreds * 4 };
-  }
-
-  function calcPrizePotatoes(potatoes) {
-    const hundreds = Math.floor(potatoes / 100);
-    return { v: hundreds * 1, s: hundreds * 2 };
-  }
-
-  function calcTotalPrize(bottles, potatoes) {
-    const b = calcPrizeBottles(bottles);
-    const p = calcPrizePotatoes(potatoes);
-    return { v: b.v + p.v, s: b.s + p.s };
+  // Выдача считается от остатка после вычета 60%
+  // Бутылки: 100 = 2в/4с, Картошка: 100 = 1в/2с
+  function calcPrizeFromRemain(bottles, potatoes) {
+    const remain = Math.floor((bottles + potatoes) * 0.4);
+    const hundreds = Math.floor(remain / 100);
+    const total = bottles + potatoes;
+    if (total === 0) return { v: 0, s: 0 };
+    const bottleShare = bottles / total;
+    const potatoShare = potatoes / total;
+    const v = Math.floor(hundreds * (bottleShare * 2 + potatoShare * 1));
+    const s = Math.floor(hundreds * (bottleShare * 4 + potatoShare * 2));
+    return { v: v, s: s };
   }
 
   // ===== СОРТИРОВКА =====
@@ -581,7 +998,53 @@
     return data;
   }
 
-  // ===== ОТРИСОВКА =====
+  // ===== ТОП ФАРМИЛОВ =====
+  function renderTop() {
+    const panel = document.getElementById('topPanel');
+    const grid = document.getElementById('topGrid');
+    if (!topVisible) { panel.classList.remove('show'); return; }
+
+    panel.classList.add('show');
+    if (!players.length) { grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">Нет данных для рейтинга</div>'; return; }
+
+    const sorted = players.slice().sort(function(a, b) {
+      const sumA = a.bottles + a.potatoes;
+      const sumB = b.bottles + b.potatoes;
+      if (sumB !== sumA) return sumB - sumA;
+      return a.id - b.id;
+    });
+
+    let html = '';
+    sorted.forEach(function(p, idx) {
+      const sum = p.bottles + p.potatoes;
+      const prize = calcPrizeFromRemain(p.bottles, p.potatoes);
+      const place = idx + 1;
+
+      let placeClass = 'place-other';
+      let placeText = place;
+      if (place === 1) { placeClass = 'place-1'; placeText = '🥇'; }
+      else if (place === 2) { placeClass = 'place-2'; placeText = '🥈'; }
+      else if (place === 3) { placeClass = 'place-3'; placeText = '🥉'; }
+
+      html += '<div class="top-card">';
+      html += '<div class="place ' + placeClass + '">' + placeText + '</div>';
+      html += '<div class="info">';
+      html += '<div class="name">' + p.name + '</div>';
+      html += '<div class="stats">🍾 ' + p.bottles + ' | 🥔 ' + p.potatoes + ' | 📊 ' + sum + '</div>';
+      html += '<div class="prize"><span class="v">🟢 Винт: ' + prize.v + '</span> | <span class="s">🔴 Спас: ' + prize.s + '</span></div>';
+      html += '</div></div>';
+    });
+
+    grid.innerHTML = html;
+  }
+
+  document.getElementById('btnToggleTop').addEventListener('click', function() {
+    topVisible = !topVisible;
+    this.textContent = topVisible ? '🏆 Скрыть топ' : '🏆 Топ';
+    renderTop();
+  });
+
+  // ===== ОТРИСОВКА ТАБЛИЦЫ =====
   function renderTable() {
     const tbody = document.getElementById('tableBody');
     const search = document.getElementById('searchInput').value.toLowerCase();
@@ -595,7 +1058,7 @@
       totalPotatoes += p.potatoes;
       totalSum += p.bottles + p.potatoes;
       totalRemain += calcRemain(p.bottles, p.potatoes);
-      const pr = calcTotalPrize(p.bottles, p.potatoes);
+      const pr = calcPrizeFromRemain(p.bottles, p.potatoes);
       totalV += pr.v;
       totalS += pr.s;
     });
@@ -608,34 +1071,44 @@
     document.getElementById('rowCount').textContent = players.length + ' игроков';
 
     if (!players.length) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков. Нажмите «Добавить игрока»</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков</td></tr>';
+      renderTop();
       return;
     }
 
     let html = '';
     data.forEach(function(p) {
       const remain = calcRemain(p.bottles, p.potatoes);
-      const prize = calcTotalPrize(p.bottles, p.potatoes);
-      const bPrize = calcPrizeBottles(p.bottles);
-      const pPrize = calcPrizePotatoes(p.potatoes);
+      const prize = calcPrizeFromRemain(p.bottles, p.potatoes);
 
       html += '<tr>';
       html += '<td><div class="name-cell"><div class="avatar" style="background:' + getAvatarColor(p.name) + '">' + getInitials(p.name) + '</div>' + p.name + '</div></td>';
-      html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" data-id="' + p.id + '" data-type="bottle"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
-      html += '<td><input type="number" class="input-num input-potato" value="" placeholder="+' + p.potatoes + '" data-id="' + p.id + '" data-type="potato"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.potatoes + '</b></div></td>';
+
+      if (isAdmin) {
+        html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" data-id="' + p.id + '" data-type="bottle"><div style="font-size:11px;color:var(--muted);margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
+        html += '<td><input type="number" class="input-num input-potato" value="" placeholder="+' + p.potatoes + '" data-id="' + p.id + '" data-type="potato"><div style="font-size:11px;color:var(--muted);margin-top:2px;">Всего: <b>' + p.potatoes + '</b></div></td>';
+      } else {
+        html += '<td><div style="font-size:16px;font-weight:700;color:#3b82f6;">' + p.bottles + '</div></td>';
+        html += '<td><div style="font-size:16px;font-weight:700;color:#d97706;">' + p.potatoes + '</div></td>';
+      }
+
       html += '<td><span class="badge badge-green">' + remain + '</span><div style="font-size:10px;color:#9ca3af;margin-top:2px;">из ' + (p.bottles + p.potatoes) + '</div></td>';
 
       html += '<td><div class="prize-line">';
       if (prize.v > 0 || prize.s > 0) {
         html += '<div class="prize-item prize-green">🟢 Винт: ' + prize.v + '</div>';
         html += '<div class="prize-item prize-red">🔴 Спас: ' + prize.s + '</div>';
-        html += '<div style="font-size:10px;color:#9ca3af;">🍾 ' + bPrize.v + 'в/' + bPrize.s + 'с + 🥔 ' + pPrize.v + 'в/' + pPrize.s + 'с</div>';
+        html += '<div style="font-size:10px;color:#9ca3af;">из остатка ' + remain + '</div>';
       } else {
         html += '<span class="badge badge-gray">—</span>';
       }
       html += '</div></td>';
 
-      html += '<td><button class="delete-btn" data-del="' + p.id + '">×</button></td>';
+      if (isAdmin) {
+        html += '<td class="admin-hide"><button class="delete-btn" data-del="' + p.id + '">×</button></td>';
+      } else {
+        html += '<td></td>';
+      }
       html += '</tr>';
     });
 
@@ -650,9 +1123,12 @@
 
     tbody.innerHTML = html;
 
-    // Привязываем обработчики к динамическим элементам
-    bindInputHandlers();
-    bindDeleteHandlers();
+    if (isAdmin) {
+      bindInputHandlers();
+      bindDeleteHandlers();
+    }
+
+    renderTop();
   }
 
   function bindInputHandlers() {
@@ -772,7 +1248,10 @@
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') document.getElementById('saveModalOverlay').classList.remove('show');
+    if (e.key === 'Escape') {
+      document.getElementById('saveModalOverlay').classList.remove('show');
+      hideAdminModal();
+    }
   });
 
   document.getElementById('btnConfirmSave').addEventListener('click', function() {
@@ -818,7 +1297,6 @@
 
       container.innerHTML = html;
 
-      // Привязываем обработчики
       document.querySelectorAll('[data-load]').forEach(function(el) {
         el.addEventListener('click', function() {
           const name = this.getAttribute('data-load');
