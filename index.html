@@ -39,6 +39,11 @@
   .btn-save:hover { background: #059669; }
   .btn-danger { background: #ef4444; color: white; }
   .btn-danger:hover { background: #dc2626; }
+  .btn-admin { background: #8b5cf6; color: white; padding: 4px 12px; font-size: 12px; }
+  .btn-admin:hover { background: #7c3aed; }
+
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn:disabled:hover { transform: none; box-shadow: none; }
 
   .dropdown { position: relative; display: inline-block; }
   .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 240px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 100; overflow: hidden; margin-top: 4px; max-height: 350px; overflow-y: auto; }
@@ -70,6 +75,7 @@
 
   input[type="number"] { width: 80px; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; text-align: center; font-weight: 600; background: #eff6ff; color: #3b82f6; }
   input[type="number"]:focus { outline: none; border-color: #3b82f6; }
+  input[type="number"]:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
 
   .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
   .badge-blue { background: #eff6ff; color: #3b82f6; }
@@ -78,8 +84,9 @@
   .badge-gray { background: #f3f4f6; color: #9ca3af; }
 
   .btn-delete-row { background: #ef4444; color: white; padding: 2px 10px; font-size: 18px; border-radius: 6px; border: none; cursor: pointer; opacity: 0.4; transition: opacity 0.2s; }
-  tr:hover .btn-delete-row { opacity: 1; }
-  .btn-delete-row:hover { background: #dc2626; opacity: 1 !important; }
+  .btn-delete-row:disabled { opacity: 0.1; cursor: not-allowed; }
+  tr:hover .btn-delete-row:not(:disabled) { opacity: 1; }
+  .btn-delete-row:hover:not(:disabled) { background: #dc2626; opacity: 1 !important; }
 
   .progress-bar { width: 100%; height: 4px; background: #e5e7eb; border-radius: 2px; margin-top: 4px; overflow: hidden; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
@@ -100,6 +107,107 @@
   .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
   .modal-buttons .btn { padding: 10px 24px; }
 
+  /* ===== МОДАЛКА АДМИНКИ ===== */
+  .admin-overlay {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+  }
+  .admin-overlay.hidden { display: none; }
+  .admin-box {
+    background: white;
+    padding: 40px 48px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    animation: popIn 0.3s ease;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .admin-box h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+  .admin-box p {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 20px;
+  }
+  .admin-box input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border 0.2s;
+  }
+  .admin-box input:focus {
+    border-color: #3b82f6;
+  }
+  .admin-box .admin-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .admin-box .admin-btn {
+    padding: 10px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .admin-box .admin-btn-enter {
+    background: #3b82f6;
+    color: white;
+  }
+  .admin-box .admin-btn-enter:hover {
+    background: #2563eb;
+  }
+  .admin-box .admin-btn-cancel {
+    background: #e5e7eb;
+    color: #1a1a2e;
+  }
+  .admin-box .admin-btn-cancel:hover {
+    background: #d1d5db;
+  }
+  .admin-box .admin-error {
+    color: #ef4444;
+    font-size: 14px;
+    margin-bottom: 12px;
+    min-height: 20px;
+  }
+
+  .mode-badge {
+    background: #8b5cf6;
+    color: white;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 12px;
+  }
+  .mode-badge.admin {
+    background: #22c55e;
+  }
+
   @media (max-width: 768px) {
     body { padding: 10px; }
     .header-left h1 { font-size: 18px; }
@@ -114,16 +222,32 @@
     th, td { padding: 8px 10px; font-size: 12px; }
     .avatar { width: 28px; height: 28px; font-size: 11px; }
     .dropdown-content { min-width: 180px; right: 0; left: auto; }
+    .admin-box { padding: 28px 20px; }
   }
 </style>
 </head>
 <body>
+
+<!-- ===== МОДАЛКА АДМИНКИ ===== -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-box">
+    <h2>🔐</h2>
+    <p>Введите пароль для редактирования</p>
+    <div class="admin-error" id="adminError"></div>
+    <input type="password" id="adminPassword" placeholder="••••" maxlength="10" autofocus>
+    <div class="admin-buttons">
+      <button class="admin-btn admin-btn-cancel" onclick="cancelAdmin()">Отменить</button>
+      <button class="admin-btn admin-btn-enter" onclick="enterAdmin()">Войти</button>
+    </div>
+  </div>
+</div>
 
 <div class="container">
   <div class="header">
     <div class="header-left">
       <h1>📦 Трекер сдачи продукции</h1>
       <span class="brand">BLACK-ROSE</span>
+      <span class="mode-badge" id="modeBadge">🔒 Просмотр</span>
     </div>
     <div class="stats">
       <div class="stat" style="border-color:#3b82f6;">
@@ -144,11 +268,12 @@
   <div class="status">
     <div class="dot" id="statusDot"></div>
     <span id="statusText">Подключение к облаку...</span>
+    <button class="btn btn-admin" onclick="showAdmin()" style="margin-left:auto;">🔑 Админ</button>
   </div>
 
   <div class="toolbar">
     <div class="toolbar-left">
-      <button class="btn btn-primary" onclick="addPlayer()">➕ Добавить игрока</button>
+      <button class="btn btn-primary" id="addBtn" onclick="addPlayer()">➕ Добавить игрока</button>
 
       <div class="dropdown">
         <button class="btn btn-sort" onclick="toggleDropdown('sortDropdown')">📊 Сортировка ▼</button>
@@ -164,7 +289,7 @@
 
     <div class="toolbar-right">
       <div class="dropdown">
-        <button class="btn btn-save" onclick="toggleDropdown('backupDropdown'); loadBackupsList()">💾 Сохранить ▼</button>
+        <button class="btn btn-save" id="saveBtn" onclick="toggleDropdown('backupDropdown'); loadBackupsList()">💾 Сохранить ▼</button>
         <div class="dropdown-content" id="backupDropdown">
           <button class="dropdown-item new-save-btn" onclick="showSaveModal()">📝 Новое сохранение</button>
           <div class="divider"></div>
@@ -174,7 +299,7 @@
         </div>
       </div>
 
-      <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить всё</button>
+      <button class="btn btn-danger" id="clearBtn" onclick="clearAll()">🗑️ Очистить всё</button>
     </div>
   </div>
 
@@ -237,6 +362,73 @@ let nextId = 1;
 let currentSort = 'reset';
 let editingNameId = null;
 let dataLoaded = false;
+let isAdmin = false;
+
+// ==========================================
+// 🔐 АДМИНКА
+// ==========================================
+
+const ADMIN_PASSWORD = '1290';
+
+function showAdmin() {
+  document.getElementById('adminOverlay').classList.remove('hidden');
+  document.getElementById('adminPassword').value = '';
+  document.getElementById('adminError').textContent = '';
+  document.getElementById('adminPassword').focus();
+}
+
+function hideAdmin() {
+  document.getElementById('adminOverlay').classList.add('hidden');
+}
+
+function enterAdmin() {
+  const pass = document.getElementById('adminPassword').value;
+  if (pass === ADMIN_PASSWORD) {
+    isAdmin = true;
+    hideAdmin();
+    updateAdminMode();
+    showNotification('🔓 Режим редактирования активирован');
+  } else {
+    document.getElementById('adminError').textContent = '❌ Неверный пароль';
+    document.getElementById('adminPassword').value = '';
+    document.getElementById('adminPassword').focus();
+  }
+}
+
+function cancelAdmin() {
+  isAdmin = false;
+  hideAdmin();
+  updateAdminMode();
+  showNotification('🔒 Режим просмотра');
+}
+
+function updateAdminMode() {
+  const badge = document.getElementById('modeBadge');
+  const addBtn = document.getElementById('addBtn');
+  const saveBtn = document.getElementById('saveBtn');
+  const clearBtn = document.getElementById('clearBtn');
+
+  if (isAdmin) {
+    badge.textContent = '🔓 Редактирование';
+    badge.className = 'mode-badge admin';
+    addBtn.disabled = false;
+    saveBtn.disabled = false;
+    clearBtn.disabled = false;
+  } else {
+    badge.textContent = '🔒 Просмотр';
+    badge.className = 'mode-badge';
+    addBtn.disabled = true;
+    saveBtn.disabled = true;
+    clearBtn.disabled = true;
+  }
+  renderTable();
+}
+
+// Нажатие Enter в поле пароля
+document.getElementById('adminPassword').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') enterAdmin();
+  if (e.key === 'Escape') cancelAdmin();
+});
 
 // ==========================================
 // 💾 РАБОТА С ДАННЫМИ
@@ -248,6 +440,7 @@ function updateStatus(online, text) {
 }
 
 function saveToFirebase() {
+  if (!isAdmin) return;
   dbRef.set({ players, nextId })
     .then(() => updateStatus(true, '☁️ Синхронизировано'))
     .catch(() => updateStatus(false, '⚠️ Ошибка соединения'));
@@ -280,6 +473,7 @@ function loadFromFirebase() {
 // ==========================================
 
 function showSaveModal() {
+  if (!isAdmin) return;
   document.getElementById('saveModal').classList.add('show');
   document.getElementById('backupNameInput').value = '';
   document.getElementById('backupNameInput').focus();
@@ -299,6 +493,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 function createBackup() {
+  if (!isAdmin) return;
   const name = document.getElementById('backupNameInput').value.trim();
   if (!name) {
     alert('Введите название сохранения!');
@@ -361,6 +556,7 @@ function loadBackupsList() {
 }
 
 function loadBackup(name) {
+  if (!isAdmin) return;
   if (!confirm(`Загрузить сохранение "${name}"? Текущие данные будут заменены.`)) return;
 
   backupsRef.child(name).once('value')
@@ -384,6 +580,7 @@ function loadBackup(name) {
 }
 
 function deleteBackup(name) {
+  if (!isAdmin) return;
   if (!confirm(`Удалить сохранение "${name}"?`)) return;
 
   backupsRef.child(name).remove()
@@ -478,11 +675,13 @@ function getSortedPlayers() {
 // ==========================================
 
 function startEditName(id) {
+  if (!isAdmin) return;
   editingNameId = id;
   renderTable();
 }
 
 function saveName(id, input) {
+  if (!isAdmin) return;
   const newName = input.value.trim();
   if (!newName) {
     alert('Имя не может быть пустым!');
@@ -516,160 +715,4 @@ function showNotification(text) {
 }
 
 function renderTable() {
-  const search = document.getElementById('searchInput').value.toLowerCase();
-  let data = getSortedPlayers().filter(p => p.name.toLowerCase().includes(search));
-
-  const top3Ids = getTop3Ids(players);
-
-  let total = 0, remain = 0, prize = 0;
-  players.forEach(p => {
-    total += p.amount;
-    remain += Math.floor(p.amount * 0.4);
-    prize += Math.floor(p.amount / 100);
-  });
-
-  document.getElementById('statTotal').textContent = total;
-  document.getElementById('statRemain').textContent = remain;
-  document.getElementById('statPrize').textContent = prize;
-  document.getElementById('rowCount').textContent = players.length + ' игроков';
-
-  if (!players.length) {
-    document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков. Нажмите "Добавить игрока"</td></tr>';
-    return;
-  }
-
-  let max = Math.max(1, ...players.map(p => p.amount));
-  let html = '';
-
-  data.forEach(p => {
-    const remainP = Math.floor(p.amount * 0.4);
-    const prizeP = Math.floor(p.amount / 100);
-    const progress = (p.amount / max * 100).toFixed(1);
-    const empty = p.amount === 0;
-
-    let topPlace = 0;
-    if (p.amount > 0) {
-      const idx = top3Ids.indexOf(p.id);
-      if (idx !== -1) topPlace = idx + 1;
-    }
-
-    let nameHtml = '';
-    if (editingNameId === p.id) {
-      nameHtml = `
-        <input class="name-input" type="text" value="${p.name}" id="nameInput_${p.id}" 
-               onblur="saveName(${p.id}, this)" 
-               onkeydown="if(event.key==='Enter') saveName(${p.id}, this); if(event.key==='Escape') cancelEditName();"
-               autofocus>
-      `;
-    } else {
-      nameHtml = `<span class="name-text" onclick="startEditName(${p.id})">${p.name}</span>`;
-    }
-
-    html += `<tr>
-      <td>
-        <div class="name-cell">
-          ${getAvatarHtml(p, topPlace)}
-          ${nameHtml}
-        </div>
-      </td>
-      <td style="text-align:center">
-        <input type="number" value="${p.amount}" min="0" onchange="updateAmount(${p.id}, this.value)">
-        <div class="progress-bar">
-          <div class="progress-fill" style="width:${progress}%;background:${empty ? '#e5e7eb' : '#3b82f6'};"></div>
-        </div>
-      </td>
-      <td style="text-align:center"><span class="badge badge-blue">${p.cumulative || 0}</span></td>
-      <td style="text-align:center"><span class="badge ${remainP > 0 ? 'badge-green' : 'badge-gray'}">${remainP}</span></td>
-      <td style="text-align:center">
-        <span class="badge ${prizeP > 0 ? 'badge-amber' : 'badge-gray'}">
-          ${prizeP > 0 ? '📦 ' : ''}${prizeP}
-        </span>
-      </td>
-      <td><button class="btn-delete-row" onclick="deletePlayer(${p.id})">×</button></td>
-    </tr>`;
-  });
-
-  html += `<tr class="total-row">
-    <td>📊 ИТОГО</td>
-    <td style="text-align:center">${total}</td>
-    <td style="text-align:center">${total}</td>
-    <td style="text-align:center">${remain}</td>
-    <td style="text-align:center">${prize} пачек</td>
-    <td></td>
-  </tr>`;
-
-  document.getElementById('tableBody').innerHTML = html;
-
-  if (editingNameId !== null) {
-    const input = document.getElementById('nameInput_' + editingNameId);
-    if (input) {
-      input.focus();
-      input.select();
-    }
-  }
-}
-
-// ==========================================
-// 🎮 ДЕЙСТВИЯ
-// ==========================================
-
-function updateAmount(id, val) {
-  const p = players.find(p => p.id === id);
-  if (p) {
-    p.amount = Math.max(0, parseInt(val) || 0);
-    let sum = 0;
-    players.forEach(player => {
-      sum += player.amount;
-      player.cumulative = sum;
-    });
-    renderTable();
-    saveToFirebase();
-  }
-}
-
-function addPlayer() {
-  const name = prompt('Введите имя игрока:');
-  if (name && name.trim()) {
-    players.push({ id: nextId++, name: name.trim(), amount: 0 });
-    let sum = 0;
-    players.forEach(p => {
-      sum += p.amount;
-      p.cumulative = sum;
-    });
-    renderTable();
-    saveToFirebase();
-  }
-}
-
-function deletePlayer(id) {
-  if (confirm('Удалить игрока?')) {
-    players = players.filter(p => p.id !== id);
-    let sum = 0;
-    players.forEach(p => {
-      sum += p.amount;
-      p.cumulative = sum;
-    });
-    renderTable();
-    saveToFirebase();
-  }
-}
-
-function clearAll() {
-  if (confirm('❗ ВНИМАНИЕ! Это удалит ВСЕХ игроков и все данные. Продолжить?')) {
-    if (confirm('Вы уверены? Данные восстановить будет невозможно!')) {
-      players = [];
-      nextId = 1;
-      renderTable();
-      saveToFirebase();
-    }
-  }
-}
-
-// ==========================================
-// 🚀 ЗАПУСК
-// ==========================================
-
-loadFromFirebase();
-</script>
-</body>
-</html>
+  const search =
