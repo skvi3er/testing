@@ -1,6 +1,513 @@
-<!doctype html> <html lang="ru" translate="no" class="dark"> <head> <script type="module" crossorigin src="//statics.moonshot.cn/kimi-web-seo/assets/polyfills-BmY-sjxE.js"></script> <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kimi AI с K3 | Создан для агентного программирования и работы со знаниями</title>
-<meta name="description" content="Попробуйте Kimi K3: создавайте играбельные многопользовательские и 3D-игры, генерируйте слайды консалтингового уровня и выполняйте задачи параллельно с Swarm и Goal — так работа со знаниями эффективнее.">
-<meta name="keywords" content="Kimi, K3, Kimi K3, визуальное программирование, Agent Swarm, Office, PPT, слайды, презентация, Moonshot AI, 月之暗面, deep research, Excel, PDF, Word, веб-сайты">  <link rel="shortcut icon" href="/favicon.ico"> <link rel="icon" type="image/x-icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)"> <link rel="icon" type="image/x-icon" href="/favicon-dark.ico" media="(prefers-color-scheme: dark)"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> <meta name="renderer" content="webkit"> <meta name="force-rendering" content="webkit"> <meta name="mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black"> <meta name="apple-mobile-web-app-title" content="Kimi"> <meta name="format-detection" content="telephone=no,email=no"> <meta name="msvalidate.01" content="38E0A3C40C0983D8FED5BD0B59E78653"> <meta name="baidu-site-verification" content="codeva-oC0GIbxpdb"> <meta name="sogou_site_verification" content="K4KQFuej81">   <script>window.OVERSEA=true</script> <script type="module" crossorigin src="//statics.moonshot.cn/kimi-web-seo/assets/index-DoebuO_b.js"></script> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/rolldown-runtime-CtLqhC6a.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/framework-CXetIQ-O.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/_plugin-vue_export-helper-DNW4j-dv.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/validate_pb-BSejyRQh.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/katex-CLyXPy3k.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/vendor-CrT_UAei.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/core-Dxz-QU8w.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/dayjs.min-BFZ_fz8v.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.utils-CTk4365z.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/suggest_pb-6yDFU3nx.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/options_pb-BIKTQZ9V.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.bridge-BdDnOOFL.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.log-sfnQNHGP.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/request-2FpfBVXQ.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/annotations_pb-Bbr_-609.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/field_behavior_pb-BIE1sTX-.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/job_pb-CJzFmbFK.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/project_pb-BWyvqbiw.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/artifact_pb-BNBQJtfD.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimiplus_pb-BiYAYFYC.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/message_ref_pb-B3DGhsg6.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/reasoning_pb-BXGWbkoB.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/goods_pb-M1wrU-Zy.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/response_pb-B4aHq_RF.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/request_pb-CEWOtu8F.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/CSROnly-Dzv5P1t-.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ref-rGVhp-o5.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/model-Cr7Tkply.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/error-BNnhWXKg.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/user-BcR8qt7Y.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/check-DQEy_yH4.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/formatter-DxXZnmn3.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/subscription-DyRPsRDN.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/chatBase-DwZiaXJm.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/queryKeys-BFnyyhyB.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/history-DICuz54v.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.icon-BK7SdkNL.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.icon-DOydczLv.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Loading-pYAAfL34.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Image-d-Bi5Acc.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Tooltip-BD8pexC7.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/WithTooltip-D5mTCqou.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ImageThumbnail-B8QFSY0w.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.loading-CIQz_2_j.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Button-Bs08hEb1.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.imagePreview-DKBK3x5N.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.button-DLSJED2b.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Modal-COimhdL7.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.modal-CndgsiC_.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Tooltip-ChTci4rT.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/captcha-rwAybifO.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi-Bhx-sKKI.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ResizeContainer-D0tYq7Ym.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimiplus_svc_pb-7IGuFWl3.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/bot_pb-DBXDDwoB.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/form.modal-DMvYxxJS.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.confirm-BetWJd7V.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/googleLoginModel-CirDdstG.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/login-U3PBb4lz.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/theme-DDZkMaQy.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/RiveImg-BAjbRsXP.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/RunningText-hAtV0NEz.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/button-Cleed3u4.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/copy-button-DnWiI7aW.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/v4-Dcu8wDVB.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/router-J6jQG0PM.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/config-BT0DS30t.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/claw-bot-COus65nY.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/service_pb-BNCgnFOH.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/event_pb-Dd8gWpgw.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/chunk-GIYVHLCQ-ClQqqd6P.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi.css-BCpG6YjL.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/PopoverMenu-XIkGa2WO.js"> <link rel="modulepreload" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/subscribe-Do2xLLf-.js"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/katex-BTdWhSYS.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/vendor-t6ip80KM.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ref-Dp7lXc1t.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Loading-_FPPz63B.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Image-D3ht6cJq.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Tooltip-LpF9yzhX.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/WithTooltip-CViyiqjM.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ImageThumbnail-9Jupfg5C.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi-BhUh-82V.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Button-Rb_OnGad.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi-C1dNVZ_H.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Modal-BdF34-du.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi-BRCUChbx.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/Tooltip-CVDv-gCG.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/captcha-NU3WF8UK.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/ResizeContainer-BrdOcZFA.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/kimi-D0yt_4dc.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/login-BTvbCDB9.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/RiveImg-BXdTu5Pl.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/RunningText-B5atj1q7.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/button-BAfgdnek.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/copy-button-BmJAMs-G.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/claw-bot-BJUbccxz.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/PopoverMenu-B69yDlLd.css"> <link rel="stylesheet" crossorigin href="//statics.moonshot.cn/kimi-web-seo/assets/index-B_pg46SZ.css"> </head> <body> <div id="app"></div>  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4655f3c58dd6497fb7ddb85b68480db7","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-</body> </html> 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📦 Трекер сдачи продукции — Бутылки + Картошка</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  :root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --accent: #3b82f6;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --red: #ef4444;
+    --red-light: #fef2f2;
+    --amber: #f59e0b;
+    --amber-light: #fffbeb;
+    --radius: 14px;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 20px;
+    color: var(--text);
+  }
+
+  .container { max-width: 1300px; margin: 0 auto; }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 span { font-weight: 400; color: var(--muted); font-size: 16px; display: block; margin-top: 2px; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .stat-card .icon { font-size: 28px; margin-bottom: 6px; }
+  .stat-card .label { font-size: 11px; text-transform: uppercase; color: var(--muted); font-weight: 600; letter-spacing: 0.5px; }
+  .stat-card .value { font-size: 24px; font-weight: 800; margin-top: 4px; }
+  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .stat-bottle { border-top: 3px solid #60a5fa; }
+  .stat-potato { border-top: 3px solid #f59e0b; }
+  .stat-total { border-top: 3px solid var(--accent); }
+  .stat-green { border-top: 3px solid var(--green); }
+  .stat-red { border-top: 3px solid var(--red); }
+
+  .toolbar {
+    background: var(--card);
+    padding: 14px 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+  .btn-ghost { background: #f3f4f6; color: var(--text); }
+  .btn-ghost:hover { background: #e5e7eb; }
+  .btn-danger { background: var(--red); color: white; }
+  .btn-danger:hover { background: #dc2626; }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box input {
+    padding: 8px 12px 8px 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    width: 200px;
+    outline: none;
+    font-family: inherit;
+  }
+
+  .search-box::before {
+    content: "🔍";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    padding: 12px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #475569;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+  }
+
+  thead th:first-child { text-align: left; padding-left: 16px; }
+
+  td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+  }
+
+  td:first-child { text-align: left; padding-left: 16px; }
+
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover { background: #f8fafc; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  tbody tr:nth-child(even):hover { background: #f1f5f9; }
+
+  .name-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .input-num {
+    width: 70px;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    text-align: center;
+    font-weight: 700;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .input-bottle { background: #eff6ff; color: #3b82f6; border-color: #bfdbfe; }
+  .input-bottle:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+  .input-potato { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+  .input-potato:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .badge-blue { background: #eff6ff; color: #3b82f6; }
+  .badge-green { background: var(--green-light); color: var(--green); }
+  .badge-red { background: var(--red-light); color: var(--red); }
+  .badge-amber { background: var(--amber-light); color: #b45309; }
+  .badge-gray { background: #f3f4f6; color: #9ca3af; }
+
+  .total-row {
+    background: linear-gradient(to right, #f8fafc, #f1f5f9) !important;
+    font-weight: 700;
+    border-top: 2px solid #e2e8f0;
+  }
+
+  .total-row td { padding: 14px 10px; font-size: 14px; }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0;
+  }
+
+  tr:hover .delete-btn { opacity: 1; }
+  .delete-btn:hover { color: var(--red); background: var(--red-light); }
+
+  .footer-bar {
+    background: #fafbfc;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .formula-note {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 400;
+    display: block;
+    margin-top: 2px;
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 20px; }
+    th, td { padding: 8px 6px; font-size: 11px; }
+    .input-num { width: 55px; padding: 4px 6px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>📦 Трекер сдачи продукции <span>Бутылки 🍾 + Картошка 🥔 = Выдача пачек</span></h1>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-bottle">
+      <div class="icon">🍾</div>
+      <div class="label">Всего бутылок</div>
+      <div class="value" id="statBottles">0</div>
+    </div>
+    <div class="stat-card stat-potato">
+      <div class="icon">🥔</div>
+      <div class="label">Всего картошки</div>
+      <div class="value" id="statPotatoes">0</div>
+    </div>
+    <div class="stat-card stat-total">
+      <div class="icon">📊</div>
+      <div class="label">Общая сумма</div>
+      <div class="value" id="statTotal">0</div>
+    </div>
+    <div class="stat-card stat-green">
+      <div class="icon">🟢</div>
+      <div class="label">Зелёные пачки</div>
+      <div class="value" id="statGreen">0</div>
+      <div class="sub">бутылки×2 + картошка×1</div>
+    </div>
+    <div class="stat-card stat-red">
+      <div class="icon">🔴</div>
+      <div class="label">Красные пачки</div>
+      <div class="value" id="statRed">0</div>
+      <div class="sub">бутылки×4 + картошка×2</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-primary" onclick="addPlayer()">➕ Добавить игрока</button>
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Поиск..." oninput="renderTable()">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-ghost" onclick="sortTable('name')">🔤 По имени</button>
+      <button class="btn btn-ghost" onclick="sortTable('total')">📊 По сумме</button>
+      <button class="btn btn-danger" onclick="clearAll()">🗑️ Очистить</button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Игрок</th>
+        <th>🍾 Бутылки<br><span class="formula-note">ввод сюда → суммируется</span></th>
+        <th>🥔 Картошка<br><span class="formula-note">ввод сюда → суммируется</span></th>
+        <th>📊 Накоплено<br><span class="formula-note">бутылки + картошка</span></th>
+        <th>🟢 Зелёные<br><span class="formula-note">бут×2 + карт×1</span></th>
+        <th>🔴 Красные<br><span class="formula-note">бут×4 + карт×2</span></th>
+        <th style="width:40px"></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div class="footer-bar">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> 🍾 Бутылки — ввод суммируется</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> 🥔 Картошка — ввод суммируется</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div> 🟢 Зелёные = бутылки×2 + картошка×1</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> 🔴 Красные = бутылки×4 + картошка×2</div>
+    </div>
+    <span id="rowCount">0 игроков</span>
+  </div>
+</div>
+
+<script>
+  let players = [
+    { id: 1, name: "Иванов Иван", bottles: 0, potatoes: 0 },
+    { id: 2, name: "Петров Петр", bottles: 0, potatoes: 0 },
+    { id: 3, name: "Сидоров Алексей", bottles: 0, potatoes: 0 },
+    { id: 4, name: "Козлова Мария", bottles: 0, potatoes: 0 },
+    { id: 5, name: "Новиков Дмитрий", bottles: 0, potatoes: 0 },
+    { id: 6, name: "Морозова Анна", bottles: 0, potatoes: 0 }
+  ];
+
+  let nextId = 7;
+  let sortCol = null;
+  let sortAsc = true;
+
+  function getInitials(name) {
+    const parts = name.split(' ');
+    return (parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : '');
+  }
+
+  function getAvatarColor(name) {
+    const colors = ['#667eea','#f093fb','#4facfe','#43e97b','#fa709a','#30cfd0','#ff9a9e','#84fab0','#f59e0b','#10b981'];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  function getSortedPlayers() {
+    let data = players.slice();
+    if (sortCol === 'name') {
+      data.sort(function(a, b) { return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name); });
+    } else if (sortCol === 'total') {
+      data.sort(function(a, b) { return sortAsc ? (a.bottles+a.potatoes) - (b.bottles+b.potatoes) : (b.bottles+b.potatoes) - (a.bottles+a.potatoes); });
+    }
+    return data;
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let data = getSortedPlayers().filter(function(p) { return p.name.toLowerCase().includes(search); });
+
+    let totalBottles = 0, totalPotatoes = 0, totalSum = 0, totalGreen = 0, totalRed = 0;
+
+    players.forEach(function(p) {
+      totalBottles += p.bottles;
+      totalPotatoes += p.potatoes;
+      totalSum += p.bottles + p.potatoes;
+      totalGreen += p.bottles * 2 + p.potatoes * 1;
+      totalRed += p.bottles * 4 + p.potatoes * 2;
+    });
+
+    document.getElementById('statBottles').textContent = totalBottles.toLocaleString('ru-RU');
+    document.getElementById('statPotatoes').textContent = totalPotatoes.toLocaleString('ru-RU');
+    document.getElementById('statTotal').textContent = totalSum.toLocaleString('ru-RU');
+    document.getElementById('statGreen').textContent = totalGreen.toLocaleString('ru-RU');
+    document.getElementById('statRed').textContent = totalRed.toLocaleString('ru-RU');
+    document.getElementById('rowCount').textContent = players.length + ' игроков';
+
+    let maxVal = 1;
+    players.forEach(function(p) { if (p.bottles + p.potatoes > maxVal) maxVal = p.bottles + p.potatoes; });
+
+    let html = '';
+    data.forEach(function(p) {
+      const sum = p.bottles + p.potatoes;
+      const green = p.bottles * 2 + p.potatoes * 1;
+      const red = p.bottles * 4 + p.potatoes * 2;
+
+      html += '<tr>';
+      html += '<td><div class="name-cell"><div class="avatar" style="background:' + getAvatarColor(p.name) + '">' + getInitials(p.name) + '</div>' + p.name + '</div></td>';
+      html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" onchange="addBottles(' + p.id + ', this.value)"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
+      html += '<td><input type="number" class="input-num input-potato" value="" placeholder="+' + p.potatoes + '" onchange="addPotatoes(' + p.id + ', this.value)"><div style="font-size:11px;color:#6b7280;margin-top:2px;">Всего: <b>' + p.potatoes + '</b></div></td>';
+      html += '<td><span class="badge badge-blue">' + sum + '</span></td>';
+      html += '<td><span class="badge badge-green">🟢 ' + green + '</span></td>';
+      html += '<td><span class="badge badge-red">🔴 ' + red + '</span></td>';
+      html += '<td><button class="delete-btn" onclick="deletePlayer(' + p.id + ')">×</button></td>';
+      html += '</tr>';
+    });
+
+    html += '<tr class="total-row">';
+    html += '<td>📊 ИТОГО</td>';
+    html += '<td>🍾 ' + totalBottles + '</td>';
+    html += '<td>🥔 ' + totalPotatoes + '</td>';
+    html += '<td>' + totalSum + '</td>';
+    html += '<td><span class="badge badge-green">🟢 ' + totalGreen + '</span></td>';
+    html += '<td><span class="badge badge-red">🔴 ' + totalRed + '</span></td>';
+    html += '<td></td>';
+    html += '</tr>';
+
+    tbody.innerHTML = html;
+  }
+
+  function addBottles(id, val) {
+    const v = parseInt(val) || 0;
+    if (v === 0) return;
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].id === id) {
+        players[i].bottles += v;
+        renderTable();
+        return;
+      }
+    }
+  }
+
+  function addPotatoes(id, val) {
+    const v = parseInt(val) || 0;
+    if (v === 0) return;
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].id === id) {
+        players[i].potatoes += v;
+        renderTable();
+        return;
+      }
+    }
+  }
+
+  function addPlayer() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+    }
+  }
+
+  function deletePlayer(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+    }
+  }
+
+  function sortTable(col) {
+    if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+    renderTable();
+  }
+
+  function clearAll() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+    }
+  }
+
+  renderTable();
+</script>
+
+</body>
+</html>
