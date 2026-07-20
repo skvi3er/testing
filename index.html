@@ -1,11 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>📦 Трекер сдачи продукции — Бутылки + Картошка</title>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
@@ -81,33 +80,6 @@
   .stat-total { border-top: 3px solid var(--accent); }
   .stat-green { border-top: 3px solid var(--green); }
   .stat-red { border-top: 3px solid var(--red); }
-
-  .status {
-    background: #dbeafe;
-    padding: 10px 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: #1e40af;
-  }
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #22c55e;
-    animation: pulse 2s infinite;
-  }
-  .dot.offline {
-    background: #ef4444;
-    animation: none;
-  }
-  @keyframes pulse {
-    0%,100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
 
   .toolbar {
     background: var(--card);
@@ -322,11 +294,6 @@
     <h1>📦 Трекер сдачи продукции <span>Бутылки 🍾 + Картошка 🥔 = Выдача пачек</span></h1>
   </div>
 
-  <div class="status">
-    <div class="dot" id="statusDot"></div>
-    <span id="statusText">Подключение к облаку...</span>
-  </div>
-
   <div class="stats-grid">
     <div class="stat-card stat-bottle">
       <div class="icon">🍾</div>
@@ -397,10 +364,10 @@
   </div>
 </div>
 
-<script>
-  // ==========================================
-  // 🔥 FIREBASE
-  // ==========================================
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyBoE4goFQmwr-zmRBg9mtT3WEH67Ky5c6I",
     authDomain: "clan-bda68.firebaseapp.com",
@@ -411,54 +378,28 @@
     appId: "1:316091052332:web:92deff2d067afd8963bc89"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
-  const dbRef = db.ref('tracker/data');
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  window.db = db;
+  window.dbRef = ref(db, 'tracker/bottles_potatoes');
+  window.firebaseSet = set;
+  window.firebaseOnValue = onValue;
+  window.firebaseRef = ref;
+</script>
 
-  // ==========================================
-  // 📊 ЛОГИКА
-  // ==========================================
+<script>
+  let players = [
+    { id: 1, name: "Иванов Иван", bottles: 0, potatoes: 0 },
+    { id: 2, name: "Петров Петр", bottles: 0, potatoes: 0 },
+    { id: 3, name: "Сидоров Алексей", bottles: 0, potatoes: 0 },
+    { id: 4, name: "Козлова Мария", bottles: 0, potatoes: 0 },
+    { id: 5, name: "Новиков Дмитрий", bottles: 0, potatoes: 0 },
+    { id: 6, name: "Морозова Анна", bottles: 0, potatoes: 0 }
+  ];
 
-  let players = [];
-  let nextId = 1;
+  let nextId = 7;
   let sortCol = null;
   let sortAsc = true;
-
-  function updateStatus(online, text) {
-    document.getElementById('statusDot').className = online ? 'dot' : 'dot offline';
-    document.getElementById('statusText').textContent = text;
-  }
-
-  function saveToFirebase() {
-    dbRef.set({ players, nextId })
-      .then(() => updateStatus(true, '☁️ Синхронизировано'))
-      .catch(() => updateStatus(false, '⚠️ Ошибка соединения'));
-  }
-
-  function loadFromFirebase() {
-    updateStatus(false, '🔄 Подключение...');
-    dbRef.on('value', snap => {
-      const data = snap.val();
-      if (data && data.players !== undefined) {
-        players = data.players || [];
-        nextId = data.nextId || 1;
-        updateStatus(true, '☁️ Синхронизировано');
-      } else {
-        // Первый запуск — создаём тестовых игроков
-        players = [
-          { id: 1, name: "Иванов Иван", bottles: 0, potatoes: 0 },
-          { id: 2, name: "Петров Петр", bottles: 0, potatoes: 0 },
-          { id: 3, name: "Сидоров Алексей", bottles: 0, potatoes: 0 },
-          { id: 4, name: "Козлова Мария", bottles: 0, potatoes: 0 },
-          { id: 5, name: "Новиков Дмитрий", bottles: 0, potatoes: 0 },
-          { id: 6, name: "Морозова Анна", bottles: 0, potatoes: 0 }
-        ];
-        nextId = 7;
-        setTimeout(saveToFirebase, 500);
-      }
-      renderTable();
-    }, () => updateStatus(false, '⚠️ Ошибка соединения'));
-  }
 
   function getInitials(name) {
     const parts = name.split(' ');
@@ -543,8 +484,78 @@
     for (let i = 0; i < players.length; i++) {
       if (players[i].id === id) {
         players[i].bottles += v;
-        renderTable();
-        saveToFirebase();
+      
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
         return;
       }
     }
@@ -556,8 +567,78 @@
     for (let i = 0; i < players.length; i++) {
       if (players[i].id === id) {
         players[i].potatoes += v;
-        renderTable();
-        saveToFirebase();
+      
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
         return;
       }
     }
@@ -567,34 +648,386 @@
     const name = prompt('Введите имя и фамилию игрока:');
     if (name && name.trim()) {
       players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
-      renderTable();
-      saveToFirebase();
+    
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
     }
   }
 
-  function deletePlayer(id) {
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
     if (confirm('Удалить игрока?')) {
       players = players.filter(function(p) { return p.id !== id; });
       renderTable();
       saveToFirebase();
     }
-  }
+  };
 
-  function sortTable(col) {
-    if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
-    renderTable();
-  }
-
-  function clearAll() {
+  const originalClearAll = clearAll;
+  clearAll = function() {
     if (confirm('Очистить все данные?')) {
       players = [];
       nextId = 1;
       renderTable();
       saveToFirebase();
     }
+  };
+
+  renderTable();
+    }
   }
 
-  loadFromFirebase();
+  function deletePlayer(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+    
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
+    }
+  }
+
+  function sortTable(col) {
+    if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = true; }
+  
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
+  }
+
+  function clearAll() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+    
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
+    }
+  }
+
+
+  // ===== FIREBASE СИНХРОНИЗАЦИЯ =====
+  function saveToFirebase() {
+    if (window.firebaseSet && window.dbRef) {
+      window.firebaseSet(window.dbRef, { players: players, nextId: nextId })
+        .catch(function(err) { console.error('Ошибка сохранения:', err); });
+    }
+  }
+
+  function loadFromFirebase() {
+    if (window.firebaseOnValue && window.firebaseRef && window.db) {
+      window.firebaseOnValue(window.dbRef, function(snapshot) {
+        const data = snapshot.val();
+        if (data && data.players) {
+          players = data.players;
+          nextId = data.nextId || 1;
+          renderTable();
+        }
+      });
+    }
+  }
+
+  // Подключаемся к Firebase после загрузки страницы
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      loadFromFirebase();
+    }, 500);
+  });
+
+  // ===== ОБЕРТКИ ДЛЯ СОХРАНЕНИЯ =====
+  const originalAddBottles = addBottles;
+  addBottles = function(id, val) {
+    originalAddBottles(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPotatoes = addPotatoes;
+  addPotatoes = function(id, val) {
+    originalAddPotatoes(id, val);
+    saveToFirebase();
+  };
+
+  const originalAddPlayer = addPlayer;
+  addPlayer = function() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), bottles: 0, potatoes: 0 });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalDeletePlayer = deletePlayer;
+  deletePlayer = function(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(function(p) { return p.id !== id; });
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  const originalClearAll = clearAll;
+  clearAll = function() {
+    if (confirm('Очистить все данные?')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  };
+
+  renderTable();
 </script>
 
 </body>
