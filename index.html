@@ -108,11 +108,11 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0,0,0,0.75);
     z-index: 9999;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(4px);
   }
   .question-overlay.hidden { display: none; }
   .question-box {
@@ -124,25 +124,27 @@
     width: 90%;
     box-shadow: 0 24px 64px rgba(0,0,0,0.3);
     animation: popIn 0.3s ease;
+    position: relative;
   }
   @keyframes popIn {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
   }
   .question-box h2 {
-    font-size: 28px;
+    font-size: 48px;
     margin-bottom: 8px;
   }
   .question-box p {
-    font-size: 18px;
+    font-size: 22px;
     color: #1a1a2e;
     margin-bottom: 28px;
-    font-weight: 500;
+    font-weight: 600;
   }
   .question-box .q-buttons {
     display: flex;
     gap: 20px;
     justify-content: center;
+    position: relative;
   }
   .question-box .q-btn {
     padding: 12px 40px;
@@ -151,7 +153,7 @@
     font-size: 18px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s;
     min-width: 120px;
   }
   .question-box .q-btn-yes {
@@ -166,9 +168,8 @@
     background: #ef4444;
     color: white;
     position: relative;
-  }
-  .question-box .q-btn-no:hover {
-    background: #dc2626;
+    transition: left 0.08s ease, top 0.08s ease;
+    z-index: 1;
   }
 
   @media (max-width: 768px) {
@@ -186,8 +187,7 @@
     .avatar { width: 28px; height: 28px; font-size: 11px; }
     .dropdown-content { min-width: 180px; right: 0; left: auto; }
     .question-box { padding: 28px 20px; }
-    .question-box h2 { font-size: 22px; }
-    .question-box p { font-size: 16px; }
+    .question-box p { font-size: 18px; }
     .question-box .q-btn { padding: 10px 24px; font-size: 16px; min-width: 80px; }
   }
 </style>
@@ -196,7 +196,7 @@
 
 <!-- ===== МОДАЛКА С ВОПРОСОМ ===== -->
 <div class="question-overlay" id="questionOverlay">
-  <div class="question-box">
+  <div class="question-box" id="questionBox">
     <h2>🤔</h2>
     <p>Ты гей?</p>
     <div class="q-buttons">
@@ -333,49 +333,67 @@ function closeQuestion() {
   document.getElementById('questionOverlay').classList.add('hidden');
 }
 
-// Убегающая кнопка "Нет"
+// Убегающая кнопка "Нет" по всему экрану
 document.addEventListener('DOMContentLoaded', function() {
   const noBtn = document.getElementById('noBtn');
   const overlay = document.getElementById('questionOverlay');
+  const box = document.getElementById('questionBox');
 
   noBtn.addEventListener('mouseover', function(e) {
-    // Получаем размеры окна и кнопки
-    const btnRect = noBtn.getBoundingClientRect();
-    const overlayRect = overlay.getBoundingClientRect();
+    // Получаем размеры окна
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
 
-    // Максимальное смещение (чтобы кнопка не вылетала за пределы)
-    const maxX = overlayRect.width - btnRect.width - 20;
-    const maxY = overlayRect.height - btnRect.height - 20;
+    // Размеры кнопки
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
 
-    // Случайное смещение
-    const offsetX = (Math.random() * 120 - 60);
-    const offsetY = (Math.random() * 120 - 60);
+    // Случайная позиция с отступами, чтобы кнопка не вылетала за экран
+    const maxX = winW - btnW - 20;
+    const maxY = winH - btnH - 20;
 
-    let newX = btnRect.left - overlayRect.left + offsetX;
-    let newY = btnRect.top - overlayRect.top + offsetY;
+    let newX = Math.random() * maxX;
+    let newY = Math.random() * maxY;
 
-    // Ограничиваем, чтобы кнопка не выходила за пределы модалки
+    // Убеждаемся, что кнопка не улетает слишком далеко от модалки
+    // (чтобы было видно, куда она убежала)
+    const boxRect = box.getBoundingClientRect();
+    const centerX = boxRect.left + boxRect.width / 2;
+    const centerY = boxRect.top + boxRect.height / 2;
+
+    // Ограничиваем радиус убегания (чтобы не улетала в другой угол)
+    const maxDist = Math.min(winW, winH) * 0.6;
+    let dx = newX + btnW/2 - centerX;
+    let dy = newY + btnH/2 - centerY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist > maxDist) {
+      newX = centerX + (dx / dist) * maxDist - btnW/2;
+      newY = centerY + (dy / dist) * maxDist - btnH/2;
+    }
+
+    // Ограничиваем, чтобы не выходила за экран
     newX = Math.max(10, Math.min(maxX, newX));
     newY = Math.max(10, Math.min(maxY, newY));
 
-    noBtn.style.position = 'absolute';
+    noBtn.style.position = 'fixed';
     noBtn.style.left = newX + 'px';
     noBtn.style.top = newY + 'px';
-    noBtn.style.transform = 'scale(0.9)';
+    noBtn.style.transform = 'scale(0.85)';
     setTimeout(() => { noBtn.style.transform = 'scale(1)'; }, 150);
   });
 
-  // Если вдруг нажали на "Нет" — ничего не происходит
+  // Если нажали на "Нет" — ничего не происходит, просто убегает
   noBtn.addEventListener('click', function(e) {
     e.preventDefault();
-    // Просто убегаем ещё раз
-    const btnRect = noBtn.getBoundingClientRect();
-    const overlayRect = overlay.getBoundingClientRect();
-    const maxX = overlayRect.width - btnRect.width - 20;
-    const maxY = overlayRect.height - btnRect.height - 20;
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const maxX = winW - btnW - 20;
+    const maxY = winH - btnH - 20;
     const newX = Math.random() * maxX;
     const newY = Math.random() * maxY;
-    noBtn.style.position = 'absolute';
+    noBtn.style.position = 'fixed';
     noBtn.style.left = newX + 'px';
     noBtn.style.top = newY + 'px';
   });
@@ -673,27 +691,4 @@ function renderTable() {
 
   document.getElementById('statTotal').textContent = total;
   document.getElementById('statRemain').textContent = remain;
-  document.getElementById('statPrize').textContent = prize;
-  document.getElementById('rowCount').textContent = players.length + ' игроков';
-
-  if (!players.length) {
-    document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков. Нажмите "Добавить игрока"</td></tr>';
-    return;
-  }
-
-  let max = Math.max(1, ...players.map(p => p.amount));
-  let html = '';
-
-  data.forEach(p => {
-    const remainP = Math.floor(p.amount * 0.4);
-    const prizeP = Math.floor(p.amount / 100);
-    const progress = (p.amount / max * 100).toFixed(1);
-    const empty = p.amount === 0;
-
-    let topPlace = 0;
-    if (p.amount > 0) {
-      const idx = top3Ids.indexOf(p.id);
-      if (idx !== -1) topPlace = idx + 1;
-    }
-
-    let
+  document.getElementById
