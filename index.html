@@ -32,13 +32,13 @@
 
   .btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
   .btn-primary { background: #3b82f6; color: white; }
-  .btn-primary:hover { background: #2563eb; }
+  .btn-primary:hover:not(:disabled) { background: #2563eb; }
   .btn-sort { background: #e5e7eb; color: #1a1a2e; }
   .btn-sort:hover { background: #d1d5db; }
   .btn-save { background: #10b981; color: white; }
-  .btn-save:hover { background: #059669; }
+  .btn-save:hover:not(:disabled) { background: #059669; }
   .btn-danger { background: #ef4444; color: white; }
-  .btn-danger:hover { background: #dc2626; }
+  .btn-danger:hover:not(:disabled) { background: #dc2626; }
   .btn-admin { background: #8b5cf6; color: white; padding: 4px 12px; font-size: 12px; }
   .btn-admin:hover { background: #7c3aed; }
 
@@ -715,4 +715,4 @@ function showNotification(text) {
 }
 
 function renderTable() {
-  const search =
+  const search
