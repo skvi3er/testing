@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -110,19 +111,136 @@
   .brand h1 {
     font-size: 52px;
     font-weight: 900;
-    letter-spacing: 6px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #3b82f6 50%, #1a1a2e 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-transform: uppercase;
+    letter-spacing: 2px;
     line-height: 1.1;
+    display: inline-block;
+    background: #1a1a2e;
+    border-radius: 4px;
+    padding: 4px 12px;
+  }
+
+  .brand .ph-black {
+    color: #ffffff;
+    background: #1a1a2e;
+    padding: 2px 8px;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .brand .ph-rose {
+    color: #1a1a2e;
+    background: #ff9900;
+    padding: 2px 8px;
+    border-radius: 0 4px 4px 0;
   }
 
   body.dark-mode .brand h1 {
-    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
+    background: #0f172a;
+  }
+
+  body.dark-mode .brand .ph-black {
+    background: #0f172a;
+    color: #f1f5f9;
+  }
+
+  body.dark-mode .brand .ph-rose {
+    color: #0f172a;
+    background: #ff9900;
+  }
+
+  /* ===== СЕКРЕТНАЯ КНОПКА — ПОДДЕРЖИМ КЛАН ===== */
+  .secret-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff9900, #ff6600);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(255,153,0,0.4), 0 0 0 0 rgba(255,153,0,0.6);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: secretPulse 3s ease-in-out infinite;
+  }
+  .secret-btn:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 6px 30px rgba(255,153,0,0.6);
+  }
+  .secret-btn:active {
+    transform: scale(0.9);
+  }
+  @keyframes secretPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,153,0,0.4), 0 0 0 0 rgba(255,153,0,0.4); }
+    50% { box-shadow: 0 4px 20px rgba(255,153,0,0.4), 0 0 0 12px rgba(255,153,0,0); }
+  }
+
+  /* ===== КОНФЕТТИ ===== */
+  .confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: -10px;
+    opacity: 0;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ===== ТОСТ ===== */
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: var(--card);
+    border: 2px solid #ff9900;
+    border-radius: 20px;
+    padding: 30px 40px;
+    text-align: center;
+    z-index: 9999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 320px;
+  }
+  .toast.show {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .toast-emoji {
+    font-size: 60px;
+    margin-bottom: 10px;
+    display: block;
+    animation: toastBounce 0.6s ease infinite alternate;
+  }
+  @keyframes toastBounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+  }
+  .toast-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .toast-sub {
+    font-size: 13px;
+    color: var(--muted);
   }
 
   .mode-indicator {
@@ -405,6 +523,7 @@
   .avatar.gold { background: linear-gradient(135deg, #f59e0b, #fbbf24); box-shadow: 0 2px 8px rgba(245,158,11,0.4); font-size: 16px; }
   .avatar.silver { background: linear-gradient(135deg, #9ca3af, #d1d5db); box-shadow: 0 2px 8px rgba(156,163,175,0.4); font-size: 16px; }
   .avatar.bronze { background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 2px 8px rgba(217,119,6,0.4); font-size: 16px; }
+  .avatar.brain { background: linear-gradient(135deg, #6366f1, #8b5cf6); box-shadow: 0 2px 8px rgba(99,102,241,0.4); font-size: 18px; }
 
   .input-num {
     width: 70px;
@@ -702,6 +821,87 @@
   .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
   .modal-buttons .btn { padding: 10px 20px; }
 
+  .name-editable {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 6px;
+    transition: background 0.15s;
+  }
+  .name-editable:hover {
+    background: var(--hover-bg);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+  .name-input {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    outline: none;
+    background: var(--input-bg);
+    color: var(--text);
+    width: 160px;
+  }
+
+  /* ===== ДОСТИЖЕНИЯ ===== */
+  .achievements-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .achievement {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .achievement.ach-active {
+    animation: achPop 0.3s ease;
+  }
+  @keyframes achPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .ach-locked {
+    background: var(--even-bg);
+    color: var(--muted);
+    opacity: 0.4;
+    filter: grayscale(1);
+  }
+  .ach-unlocked {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    border: 1px solid #fbbf24;
+    box-shadow: 0 2px 6px rgba(251,191,36,0.3);
+  }
+  body.dark-mode .ach-unlocked {
+    background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.15));
+    color: #fbbf24;
+    border-color: rgba(251,191,36,0.4);
+  }
+  .ach-legendary {
+    background: linear-gradient(135deg, #fef3c7, #fbbf24, #f59e0b);
+    color: #78350f;
+    border: 1px solid #f59e0b;
+    box-shadow: 0 2px 8px rgba(245,158,11,0.4);
+    animation: achGlow 2s ease-in-out infinite alternate;
+  }
+  @keyframes achGlow {
+    from { box-shadow: 0 2px 8px rgba(245,158,11,0.3); }
+    to { box-shadow: 0 4px 16px rgba(245,158,11,0.6); }
+  }
+  body.dark-mode .ach-legendary {
+    background: linear-gradient(135deg, rgba(251,191,36,0.25), rgba(245,158,11,0.2));
+    color: #fbbf24;
+  }
+
   @media (max-width: 768px) {
     body { padding: 10px; }
     .brand h1 { font-size: 36px; letter-spacing: 3px; }
@@ -713,6 +913,7 @@
     .top-grid { grid-template-columns: 1fr; }
   }
 </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body class="view-only">
@@ -739,7 +940,7 @@
 
   <!-- BLACK-ROSE -->
   <div class="brand" id="brandLogo">
-    <h1>BLACK-ROSE</h1>
+    <h1><span class="ph-black">BLACK</span><span class="ph-rose">ROSE</span></h1>
   </div>
 
   <div class="mode-indicator">
@@ -748,12 +949,15 @@
   </div>
 
   <div class="header">
-    <h2>📦 Трекер сдачи продукции <span>Бутылки 🍾 + Картошка 🥔 = Выдача пачек</span></h2>
+    <h2 id="stathamQuote" style="font-style:italic;min-height:56px;display:flex;flex-direction:column;justify-content:center;gap:4px;">
+      <span id="quoteText">«Ты — не ты, когда голоден.»</span>
+      <span style="font-size:12px;color:var(--muted);font-style:normal;font-weight:500;">— Джейсон Стэтхам</span>
+    </h2>
   </div>
 
   <!-- ТОП ФАРМИЛОВ -->
   <div class="top-panel" id="topPanel">
-    <h3>🏆 Топ фармилов</h3>
+    <h3>🏆 Топ фармил</h3>
     <div class="top-grid" id="topGrid"></div>
   </div>
 
@@ -796,6 +1000,7 @@
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="btn btn-top" id="btnToggleTop">🏆 Топ</button>
+      <button class="btn btn-ghost" id="btnCopyTable">📋 Скопировать таблицу</button>
       <button class="btn btn-ghost" id="btnSortName">🔤 По имени</button>
       <button class="btn btn-ghost" id="btnSortTotal">📊 По сумме</button>
 
@@ -817,7 +1022,7 @@
   <table>
     <thead>
       <tr>
-        <th>Игрок</th>
+        <th style="min-width:220px">Игрок</th>
         <th>🍾 Бутылки<br><span class="formula-note">ввод сюда → суммируется</span></th>
         <th>🥔 Картошка<br><span class="formula-note">ввод сюда → суммируется</span></th>
         <th>📊 Накоплено<br><span class="formula-note">-60% от суммы</span></th>
@@ -948,12 +1153,81 @@
   document.getElementById('btnTheme').addEventListener('click', toggleTheme);
   loadTheme();
 
+  // ===== ЦИТАТЫ СТЭТХАМА =====
+  const STATHAM_QUOTES = [
+    "Ты — не ты, когда голоден.",
+    "Я не злой. Я просто не терплю дураков.",
+    "Если хочешь добиться успеха — не смотри на часы. Делай то, что делают часы. Иди вперёд.",
+    "Я не говорю, что я лучший. Я просто не знаю никого лучше.",
+    "В жизни есть два типа людей: те, кто работает, и те, кто ищет оправдания.",
+    "Не важно, сколько раз ты упал. Важно, сколько раз ты поднялся.",
+    "Я не боюсь смерти. Я боюсь не прожить жизнь так, как хотел.",
+    "Если ты не готов рисковать обычным, придётся довольствоваться посредственным.",
+    "Самый большой риск — это не рисковать.",
+    "Я не проигрываю. Я либо побеждаю, либо учусь.",
+    "Никто не сделает это за тебя. Никто.",
+    "Боль — это слабость, покидающая тело.",
+    "Не жалейся. Не объясняйся. Просто делай.",
+    "Твои ограничения — это только твои мысли.",
+    "Каждый день — это шанс стать лучше, чем вчера.",
+    "Не жди идеального момента. Бери момент и делай его идеальным.",
+    "Тот, кто говорит, что это невозможно, не должен мешать тому, кто это делает.",
+    "Успех — это когда твои мечты надевают ботинки и идут работать.",
+    "Я не бегу от проблем. Я бегу к решениям.",
+    "Ты сильнее, чем думаешь. Докажи это себе.",
+    "Лучший способ предсказать будущее — создать его.",
+    "Не сравнивай себя с другими. Сравнивай себя с тем, кем ты был вчера.",
+    "Страх — это иллюзия. Действие — реальность.",
+    "Если это не больно — значит, ты не растёшь.",
+    "Я не ищу лёгких путей. Я ищу правильных.",
+    "Твоя жизнь — твой выбор. Выбирай мудро.",
+    "Нет ничего невозможного. Есть только то, что ты ещё не попробовал.",
+    "Не говори, что не можешь. Скажи, что ещё не научился.",
+    "Победитель — это тот, кто встал на один раз больше, чем упал.",
+    "Я не верю в удачу. Я верю в труд.",
+  ];
+
+  let currentQuoteIndex = 0;
+
+  function updateQuote() {
+    const quoteEl = document.getElementById('quoteText');
+    if (!quoteEl) return;
+    currentQuoteIndex = (currentQuoteIndex + 1) % STATHAM_QUOTES.length;
+    quoteEl.style.opacity = '0';
+    setTimeout(function() {
+      quoteEl.textContent = '«' + STATHAM_QUOTES[currentQuoteIndex] + '»';
+      quoteEl.style.opacity = '1';
+    }, 300);
+  }
+
+  // Плавный переход для цитаты
+  const quoteStyle = document.createElement('style');
+  quoteStyle.textContent = '#quoteText { transition: opacity 0.3s ease; }';
+  document.head.appendChild(quoteStyle);
+
+  // Автообновление раз в 15 минут
+  setInterval(updateQuote, 15 * 60 * 1000);
+
   // ===== ДАННЫЕ =====
   let players = [];
   let nextId = 1;
   let sortCol = null;
   let sortAsc = true;
-  let topVisible = false;
+  let topVisible = true;
+
+  // ===== ДОСТИЖЕНИЯ =====
+  const ACHIEVEMENTS = [
+    { id: 1,  name: 'Новичок',      icon: '🌱', req: 100,   type: 'bottle',  tier: 'common' },
+    { id: 2,  name: 'Собиратель',   icon: '🍾', req: 250,   type: 'bottle',  tier: 'common' },
+    { id: 3,  name: 'Фермер',       icon: '🥔', req: 500,   type: 'potato',  tier: 'common' },
+    { id: 4,  name: 'Картофельный', icon: '🥔', req: 1000,  type: 'potato',  tier: 'rare' },
+    { id: 5,  name: 'Бутылочный',   icon: '🍾', req: 1500,  type: 'bottle',  tier: 'rare' },
+    { id: 6,  name: 'Магнат',       icon: '💰', req: 2500,  type: 'total',   tier: 'rare' },
+    { id: 7,  name: 'Титан',        icon: '⚡', req: 4000,  type: 'total',   tier: 'epic' },
+    { id: 8,  name: 'Легенда',      icon: '👑', req: 6000,  type: 'total',   tier: 'epic' },
+    { id: 9,  name: 'Бог фарма',    icon: '🔥', req: 8500,  type: 'total',   tier: 'legendary' },
+    { id: 10, name: 'Абсолют',      icon: '💎', req: 9999,  type: 'total',   tier: 'legendary' },
+  ];
 
   // ===== УТИЛИТЫ =====
   function getInitials(name) {
@@ -987,6 +1261,39 @@
     return { v: v, s: s };
   }
 
+  function getPlayerAchievements(bottles, potatoes) {
+    const total = bottles + potatoes;
+    return ACHIEVEMENTS.map(function(a) {
+      let unlocked = false;
+      if (a.type === 'bottle' && bottles >= a.req) unlocked = true;
+      else if (a.type === 'potato' && potatoes >= a.req) unlocked = true;
+      else if (a.type === 'total' && total >= a.req) unlocked = true;
+      return { ...a, unlocked: unlocked };
+    });
+  }
+
+  function renderAchievements(bottles, potatoes) {
+    const achs = getPlayerAchievements(bottles, potatoes);
+    // Находим самое высокое разблокированное достижение
+    let highest = null;
+    for (let i = achs.length - 1; i >= 0; i--) {
+      if (achs[i].unlocked) { highest = achs[i]; break; }
+    }
+
+    let html = '<div class="achievements-row">';
+    if (highest) {
+      const cls = highest.tier === 'legendary'
+        ? 'achievement ach-legendary ach-active'
+        : 'achievement ach-unlocked ach-active';
+      const typeIcon = highest.type === 'bottle' ? '🍾' : highest.type === 'potato' ? '🥔' : '📊';
+      html += '<span class="' + cls + '" title="' + highest.name + ' — ' + highest.req + ' ' + typeIcon + '">' + highest.icon + ' ' + highest.name + '</span>';
+    } else {
+      html += '<span class="achievement ach-locked">🔒 Нет ранга</span>';
+    }
+    html += '</div>';
+    return html;
+  }
+
   // ===== СОРТИРОВКА =====
   function getSortedPlayers() {
     let data = players.slice();
@@ -1002,8 +1309,6 @@
   function renderTop() {
     const panel = document.getElementById('topPanel');
     const grid = document.getElementById('topGrid');
-    if (!topVisible) { panel.classList.remove('show'); return; }
-
     panel.classList.add('show');
     if (!players.length) { grid.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;">Нет данных для рейтинга</div>'; return; }
 
@@ -1015,19 +1320,20 @@
     });
 
     let html = '';
-    sorted.forEach(function(p, idx) {
+    sorted.slice(0, 3).forEach(function(p, idx) {
       const sum = p.bottles + p.potatoes;
       const prize = calcPrizeFromRemain(p.bottles, p.potatoes);
       const place = idx + 1;
 
       let placeClass = 'place-other';
       let placeText = place;
-      if (place === 1) { placeClass = 'place-1'; placeText = '🥇'; }
-      else if (place === 2) { placeClass = 'place-2'; placeText = '🥈'; }
-      else if (place === 3) { placeClass = 'place-3'; placeText = '🥉'; }
+      let topAvatar = '🧠';
+      if (place === 1) { placeClass = 'place-1'; placeText = '🥇'; topAvatar = '🥇'; }
+      else if (place === 2) { placeClass = 'place-2'; placeText = '🥈'; topAvatar = '🥈'; }
+      else if (place === 3) { placeClass = 'place-3'; placeText = '🥉'; topAvatar = '🥉'; }
 
       html += '<div class="top-card">';
-      html += '<div class="place ' + placeClass + '">' + placeText + '</div>';
+      html += '<div class="place ' + placeClass + '">' + topAvatar + '</div>';
       html += '<div class="info">';
       html += '<div class="name">' + p.name + '</div>';
       html += '<div class="stats">🍾 ' + p.bottles + ' | 🥔 ' + p.potatoes + ' | 📊 ' + sum + '</div>';
@@ -1038,10 +1344,83 @@
     grid.innerHTML = html;
   }
 
-  document.getElementById('btnToggleTop').addEventListener('click', function() {
-    topVisible = !topVisible;
-    this.textContent = topVisible ? '🏆 Скрыть топ' : '🏆 Топ';
-    renderTop();
+  // ===== КОПИРОВАНИЕ ТАБЛИЦЫ =====
+  document.getElementById('btnCopyTable').addEventListener('click', function() {
+    if (!players.length) {
+      alert('Нет данных для копирования!');
+      return;
+    }
+
+    let totalBottles = 0, totalPotatoes = 0, totalSum = 0, totalRemain = 0;
+    let totalV = 0, totalS = 0;
+
+    players.forEach(function(p) {
+      totalBottles += p.bottles;
+      totalPotatoes += p.potatoes;
+      totalSum += p.bottles + p.potatoes;
+      totalRemain += calcRemain(p.bottles, p.potatoes);
+      const pr = calcPrizeFromRemain(p.bottles, p.potatoes);
+      totalV += pr.v;
+      totalS += pr.s;
+    });
+
+    // Сортируем по убыванию суммы для красивого вывода
+    const sorted = players.slice().sort(function(a, b) {
+      return (b.bottles + b.potatoes) - (a.bottles + a.potatoes);
+    });
+
+    let lines = [];
+    lines.push('📦 **BLACK-ROSE — Сдача продукции**');
+    lines.push('');
+
+    // Заголовок таблицы
+    lines.push('```');
+    lines.push('╔════╦════════════════════╦══════════╦══════════╦══════════╦════════════════╗');
+    lines.push('║ №  ║ Игрок              ║ 🍾 Бут.  ║ 🥔 Карт. ║ 📊 Сумма ║ 🎁 Выдача      ║');
+    lines.push('╠════╬════════════════════╬══════════╬══════════╬══════════╬════════════════╣');
+
+    sorted.forEach(function(p, idx) {
+      const prize = calcPrizeFromRemain(p.bottles, p.potatoes);
+      const name = p.name.length > 18 ? p.name.substring(0, 17) + '…' : p.name;
+      const namePad = name.padEnd(18, ' ');
+      const botPad = String(p.bottles).padStart(8, ' ');
+      const potPad = String(p.potatoes).padStart(8, ' ');
+      const sumPad = String(p.bottles + p.potatoes).padStart(8, ' ');
+      let prizeStr = '—';
+      if (prize.v > 0 || prize.s > 0) {
+        prizeStr = 'В:' + prize.v + ' С:' + prize.s;
+      }
+      const prizePad = prizeStr.padStart(14, ' ');
+      const num = String(idx + 1).padStart(2, ' ');
+      lines.push('║ ' + num + ' ║ ' + namePad + ' ║' + botPad + ' ║' + potPad + ' ║' + sumPad + ' ║' + prizePad + ' ║');
+    });
+
+    lines.push('╠════╬════════════════════╬══════════╬══════════╬══════════╬════════════════╣');
+
+    const totBotPad = String(totalBottles).padStart(8, ' ');
+    const totPotPad = String(totalPotatoes).padStart(8, ' ');
+    const totSumPad = String(totalSum).padStart(8, ' ');
+    const totPrizePad = ('В:' + totalV + ' С:' + totalS).padStart(14, ' ');
+    lines.push('║ ИТ ║ Всего:             ║' + totBotPad + ' ║' + totPotPad + ' ║' + totSumPad + ' ║' + totPrizePad + ' ║');
+
+    lines.push('╚════╩════════════════════╩══════════╩══════════╩══════════╩════════════════╝');
+    lines.push('```');
+    lines.push('');
+    lines.push('📊 **Итого:** 🍾 ' + totalBottles + ' | 🥔 ' + totalPotatoes + ' | 📈 ' + totalSum);
+    lines.push('💰 **Выдача:** 🟢 Винт: ' + totalV + ' | 🔴 Спас: ' + totalS);
+    lines.push('📅 ' + new Date().toLocaleString('ru-RU'));
+
+    const text = lines.join('\n');
+
+    navigator.clipboard.writeText(text).then(function() {
+      const btn = document.getElementById('btnCopyTable');
+      const oldText = btn.textContent;
+      btn.textContent = '✅ Скопировано!';
+      setTimeout(function() { btn.textContent = oldText; }, 2000);
+    }).catch(function(err) {
+      console.error('Ошибка копирования:', err);
+      alert('Не удалось скопировать. Попробуйте вручную.');
+    });
   });
 
   // ===== ОТРИСОВКА ТАБЛИЦЫ =====
@@ -1082,7 +1461,29 @@
       const prize = calcPrizeFromRemain(p.bottles, p.potatoes);
 
       html += '<tr>';
-      html += '<td><div class="name-cell"><div class="avatar" style="background:' + getAvatarColor(p.name) + '">' + getInitials(p.name) + '</div>' + p.name + '</div></td>';
+      // Определяем ранг игрока по сумме (бутылки + картошка)
+      const playerSum = p.bottles + p.potatoes;
+      let rank = 0;
+      const sortedForRank = players.slice().sort(function(a, b) {
+        const sumA = a.bottles + a.potatoes;
+        const sumB = b.bottles + b.potatoes;
+        if (sumB !== sumA) return sumB - sumA;
+        return a.id - b.id;
+      });
+      for (let ri = 0; ri < sortedForRank.length; ri++) {
+        if (sortedForRank[ri].id === p.id) { rank = ri + 1; break; }
+      }
+
+      let avatarClass = 'brain';
+      let avatarContent = '🧠';
+      if (rank === 1) { avatarClass = 'gold'; avatarContent = '🥇'; }
+      else if (rank === 2) { avatarClass = 'silver'; avatarContent = '🥈'; }
+      else if (rank === 3) { avatarClass = 'bronze'; avatarContent = '🥉'; }
+
+      const nameEditable = isAdmin 
+        ? '<span class="name-editable" data-edit-name="' + p.id + '" title="Кликни для редактирования">' + p.name + '</span>'
+        : p.name;
+      html += '<td><div class="name-cell"><div class="avatar ' + avatarClass + '">' + avatarContent + '</div><div style="display:flex;flex-direction:column;gap:2px;">' + nameEditable + renderAchievements(p.bottles, p.potatoes) + '</div></div></td>';
 
       if (isAdmin) {
         html += '<td><input type="number" class="input-num input-bottle" value="" placeholder="+' + p.bottles + '" data-id="' + p.id + '" data-type="bottle"><div style="font-size:11px;color:var(--muted);margin-top:2px;">Всего: <b>' + p.bottles + '</b></div></td>';
@@ -1126,6 +1527,7 @@
     if (isAdmin) {
       bindInputHandlers();
       bindDeleteHandlers();
+      bindNameEditHandlers();
     }
 
     renderTop();
@@ -1161,6 +1563,45 @@
           renderTable();
           saveCurrent();
         }
+      });
+    });
+  }
+
+  function bindNameEditHandlers() {
+    document.querySelectorAll('[data-edit-name]').forEach(function(span) {
+      span.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const id = parseInt(this.getAttribute('data-edit-name'));
+        const currentName = this.textContent;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'name-input';
+        input.value = currentName;
+        input.maxLength = 30;
+
+        const saveName = function() {
+          const newName = input.value.trim();
+          if (newName && newName !== currentName) {
+            for (let i = 0; i < players.length; i++) {
+              if (players[i].id === id) {
+                players[i].name = newName;
+                break;
+              }
+            }
+            saveCurrent();
+          }
+          renderTable();
+        };
+
+        input.addEventListener('blur', saveName);
+        input.addEventListener('keydown', function(ev) {
+          if (ev.key === 'Enter') { input.blur(); }
+          if (ev.key === 'Escape') { renderTable(); }
+        });
+
+        this.parentNode.replaceChild(input, this);
+        input.focus();
+        input.select();
       });
     });
   }
@@ -1328,9 +1769,93 @@
     }, { onlyOnce: true });
   }
 
+  // ===== СЕКРЕТНАЯ КНОПКА — ПОДДЕРЖИМ КЛАН =====
+  const SECRET_MESSAGES = [
+    { emoji: '🔥', text: 'BLACK-ROSE — лучший клан!', sub: 'Фармишь как бог' },
+    { emoji: '💪', text: 'Ты машина!', sub: 'Продолжай в том же духе' },
+    { emoji: '👑', text: 'Король фарма!', sub: 'Все тебе завидуют' },
+    { emoji: '⚡', text: 'Молния!', sub: 'Ты быстрее всех' },
+    { emoji: '🎯', text: 'В яблочко!', sub: 'Точность — твоё второе имя' },
+    { emoji: '🚀', text: 'На Марс!', sub: 'Ты взлетаешь к вершинам' },
+    { emoji: '💎', text: 'Алмазный уровень!', sub: 'Ты непобедим' },
+    { emoji: '🏆', text: 'Чемпион!', sub: 'Топ-1 по праву' },
+    { emoji: '🌟', text: 'Звезда!', sub: 'Сияешь ярче всех' },
+    { emoji: '🐉', text: 'Дракон!', sub: 'Ты сжигаешь конкурентов' },
+    { emoji: '🎉', text: 'Праздник!', sub: 'Каждый день с BLACK-ROSE — праздник' },
+    { emoji: '🍾', text: 'Шампанское!', sub: 'За победы клана!' },
+  ];
+
+  function createConfetti() {
+    const container = document.getElementById('confettiContainer');
+    const colors = ['#ff9900', '#ff6600', '#fbbf24', '#ef4444', '#3b82f6', '#10b981', '#a855f7', '#ec4899'];
+    const shapes = ['50%', '0%', '50% 0 50% 50%', '0 50% 50% 50%'];
+
+    for (let i = 0; i < 80; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+      piece.style.width = (Math.random() * 8 + 6) + 'px';
+      piece.style.height = (Math.random() * 8 + 6) + 'px';
+      piece.style.animation = 'confettiFall ' + (Math.random() * 2 + 2) + 's linear ' + (Math.random() * 1.5) + 's forwards';
+      container.appendChild(piece);
+    }
+
+    setTimeout(function() {
+      container.innerHTML = '';
+    }, 5000);
+  }
+
+  function showToast() {
+    const msg = SECRET_MESSAGES[Math.floor(Math.random() * SECRET_MESSAGES.length)];
+    document.getElementById('toastEmoji').textContent = msg.emoji;
+    document.getElementById('toastText').textContent = msg.text;
+    document.getElementById('toastSub').textContent = msg.sub;
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 2500);
+  }
+
+  let secretClickCount = 0;
+  document.getElementById('secretBtn').addEventListener('click', function() {
+    secretClickCount++;
+    createConfetti();
+    showToast();
+
+    // Каждые 5 кликов — бонусное сообщение
+    if (secretClickCount % 5 === 0) {
+      setTimeout(function() {
+        document.getElementById('toastEmoji').textContent = '👑';
+        document.getElementById('toastText').textContent = 'Ты нажал ' + secretClickCount + ' раз!';
+        document.getElementById('toastSub').textContent = 'Ты настоящий фанат BLACK-ROSE!';
+        document.getElementById('toast').classList.add('show');
+        setTimeout(function() {
+          document.getElementById('toast').classList.remove('show');
+        }, 3000);
+      }, 600);
+    }
+  });
+
   // ===== ЗАПУСК =====
   renderTable();
 </script>
+
+<!-- СЕКРЕТНАЯ КНОПКА — ПОДДЕРЖИМ КЛАН -->
+<button class="secret-btn" id="secretBtn" title="Нажми меня!">🚀</button>
+
+<!-- КОНФЕТТИ КОНТЕЙНЕР -->
+<div class="confetti-container" id="confettiContainer"></div>
+
+<!-- ТОСТ -->
+<div class="toast" id="toast">
+  <span class="toast-emoji" id="toastEmoji">🔥</span>
+  <div class="toast-text" id="toastText">BLACK-ROSE — лучший клан!</div>
+  <div class="toast-sub" id="toastSub">Фармишь как бог</div>
+</div>
 
 </body>
 </html>
