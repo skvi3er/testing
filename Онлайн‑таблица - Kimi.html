@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📦 Трекер сдачи продукции — Онлайн-игра</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: #6b7280;
+    --border: #e5e7eb;
+    --accent: #3b82f6;
+    --accent-light: #eff6ff;
+    --success: #10b981;
+    --success-light: #ecfdf5;
+    --warning: #f59e0b;
+    --warning-light: #fffbeb;
+    --danger: #ef4444;
+    --danger-light: #fef2f2;
+    --purple: #8b5cf6;
+    --purple-light: #f5f3ff;
+    --radius: 12px;
+    --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+    --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 24px;
+    color: var(--text-primary);
+  }
+
+  .tracker-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .tracker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .tracker-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+  }
+
+  .tracker-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    box-shadow: var(--shadow);
+    min-width: 140px;
+    border: 1px solid var(--border);
+  }
+
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .stat-card.total { border-left: 3px solid var(--accent); }
+  .stat-card.remain { border-left: 3px solid var(--success); }
+  .stat-card.prize { border-left: 3px solid var(--warning); }
+  .stat-card.avg { border-left: 3px solid var(--purple); }
+
+  .table-wrapper {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .table-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(to right, #fafbfc, #ffffff);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-box {
+    position: relative;
+  }
+
+  .search-box input {
+    padding: 8px 12px 8px 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+  }
+
+  .search-box::before {
+    content: "🔍";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    background: var(--bg);
+    color: var(--text-primary);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead {
+    background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid #e2e8f0;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  th:hover {
+    background: #e2e8f0;
+  }
+
+  th .sort-icon {
+    margin-left: 4px;
+    opacity: 0.3;
+    font-size: 10px;
+  }
+
+  th.sorted .sort-icon {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--text-primary);
+    vertical-align: middle;
+  }
+
+  tbody tr {
+    transition: all 0.15s;
+  }
+
+  tbody tr:hover {
+    background: #f8fafc;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fafbfc;
+  }
+
+  tbody tr:nth-child(even):hover {
+    background: #f1f5f9;
+  }
+
+  .name-cell {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .input-number {
+    width: 80px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-light);
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .input-number:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .badge-blue {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .badge-green {
+    background: var(--success-light);
+    color: var(--success);
+  }
+
+  .badge-amber {
+    background: var(--warning-light);
+    color: #b45309;
+  }
+
+  .badge-purple {
+    background: var(--purple-light);
+    color: var(--purple);
+  }
+
+  .badge-gray {
+    background: #f3f4f6;
+    color: #9ca3af;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .row-total {
+    background: linear-gradient(to right, #f8fafc, #f1f5f9) !important;
+    font-weight: 700;
+    border-top: 2px solid #e2e8f0;
+  }
+
+  .row-total td {
+    padding: 16px;
+    color: var(--text-primary);
+    font-size: 14px;
+  }
+
+  .empty-row td {
+    color: #9ca3af;
+    font-style: italic;
+  }
+
+  .prize-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .prize-icon {
+    font-size: 14px;
+  }
+
+  .formula-hint {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0;
+  }
+
+  tr:hover .delete-btn {
+    opacity: 1;
+  }
+
+  .delete-btn:hover {
+    color: var(--danger);
+    background: var(--danger-light);
+  }
+
+  .table-footer {
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    background: #fafbfc;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .export-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-export {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+  }
+
+  .btn-export:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+  }
+
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    .tracker-header { flex-direction: column; align-items: flex-start; }
+    .stats-row { width: 100%; }
+    .search-box input { width: 100%; }
+    th, td { padding: 10px 8px; font-size: 12px; }
+    .input-number { width: 60px; padding: 4px 6px; }
+    .table-toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar-left { flex-wrap: wrap; }
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="tracker-container">
+  <div class="tracker-header">
+    <div>
+      <div class="tracker-title">📦 Трекер сдачи продукции</div>
+      <div class="tracker-subtitle">Онлайн-игра • Автоматический расчёт накопительных сумм и призов</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card total">
+        <div class="stat-label">Всего сдано</div>
+        <div class="stat-value" id="stat-total">0</div>
+      </div>
+      <div class="stat-card remain">
+        <div class="stat-label">Остаток (40%)</div>
+        <div class="stat-value" id="stat-remain">0</div>
+      </div>
+      <div class="stat-card prize">
+        <div class="stat-label">Всего призов</div>
+        <div class="stat-value" id="stat-prize">0</div>
+      </div>
+      <div class="stat-card avg">
+        <div class="stat-label">Среднее</div>
+        <div class="stat-value" id="stat-avg">0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="export-bar">
+    <button class="btn btn-export" onclick="exportToCSV()">📥 Скачать CSV</button>
+    <button class="btn btn-ghost" onclick="exportToJSON()">📋 Скопировать JSON</button>
+    <button class="btn btn-ghost" onclick="clearAll()">🗑️ Очистить все</button>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="table-toolbar">
+      <div class="toolbar-left">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Поиск по имени..." oninput="filterTable()">
+        </div>
+        <button class="btn btn-ghost" onclick="sortTable('name')">🔤 По имени</button>
+        <button class="btn btn-ghost" onclick="sortTable('amount')">📊 По количеству</button>
+      </div>
+      <button class="btn btn-primary" onclick="addPlayer()">➕ Добавить игрока</button>
+    </div>
+
+    <table id="productionTable">
+      <thead>
+        <tr>
+          <th onclick="sortTable('name')">Игрок <span class="sort-icon">↕</span></th>
+          <th onclick="sortTable('amount')" style="text-align:center">Факт. кол-во <span class="sort-icon">↕</span></th>
+          <th style="text-align:center">Накопительная сумма</th>
+          <th style="text-align:center">Остаток (40%)<br><span class="formula-hint">факт × 0.4</span></th>
+          <th style="text-align:center">Приз (пачки)<br><span class="formula-hint">100 = 1 пачка</span></th>
+          <th style="width:40px"></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      </tbody>
+    </table>
+
+    <div class="table-footer">
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Фактическое — вводится вручную</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div> Остаток = факт × 0.4</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div> Приз = факт ÷ 100</div>
+      </div>
+      <span id="rowCount">0 игроков</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Начальные данные
+  let players = [
+    { id: 1, name: "Иванов Иван", amount: 150 },
+    { id: 2, name: "Петров Петр", amount: 230 },
+    { id: 3, name: "Сидоров Алексей", amount: 0 },
+    { id: 4, name: "Козлова Мария", amount: 310 },
+    { id: 5, name: "Новиков Дмитрий", amount: 180 },
+    { id: 6, name: "Морозова Анна", amount: 0 },
+    { id: 7, name: "Волков Сергей", amount: 250 },
+    { id: 8, name: "Лебедева Ольга", amount: 120 },
+    { id: 9, name: "Соколов Андрей", amount: 0 },
+    { id: 10, name: "Попова Екатерина", amount: 200 },
+    { id: 11, name: "Кузнецов Михаил", amount: 170 },
+    { id: 12, name: "Васильева Наталья", amount: 90 }
+  ];
+
+  let nextId = 13;
+  let sortCol = null;
+  let sortAsc = true;
+
+  function getInitials(name) {
+    const parts = name.split(' ');
+    return (parts[0]?.[0] || '') + (parts[1]?.[0] || '');
+  }
+
+  function getAvatarColor(name) {
+    const colors = [
+      ['#667eea', '#764ba2'],
+      ['#f093fb', '#f5576c'],
+      ['#4facfe', '#00f2fe'],
+      ['#43e97b', '#38f9d7'],
+      ['#fa709a', '#fee140'],
+      ['#30cfd0', '#330867'],
+      ['#ff9a9e', '#fecfef'],
+      ['#ffecd2', '#fcb69f'],
+      ['#84fab0', '#8fd3f4'],
+      ['#a8edea', '#fed6e3']
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    const idx = Math.abs(hash) % colors.length;
+    return `linear-gradient(135deg, ${colors[idx][0]}, ${colors[idx][1]})`;
+  }
+
+  function calculateCumulative(data) {
+    let sum = 0;
+    return data.map(p => {
+      sum += p.amount;
+      return { ...p, cumulative: sum };
+    });
+  }
+
+  function getSortedPlayers() {
+    let data = [...players];
+    if (sortCol === 'name') {
+      data.sort((a, b) => sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+    } else if (sortCol === 'amount') {
+      data.sort((a, b) => sortAsc ? a.amount - b.amount : b.amount - a.amount);
+    }
+    return calculateCumulative(data);
+  }
+
+  function renderTable() {
+    const tbody = document.getElementById('tableBody');
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    let data = getSortedPlayers().filter(p => p.name.toLowerCase().includes(search));
+
+    const maxAmount = Math.max(...players.map(p => p.amount), 1);
+    const totalAmount = players.reduce((s, p) => s + p.amount, 0);
+    const totalRemain = players.reduce((s, p) => s + Math.floor(p.amount * 0.4), 0);
+    const totalPrize = players.reduce((s, p) => s + Math.floor(p.amount / 100), 0);
+    const avg = players.length > 0 ? Math.round(totalAmount / players.length) : 0;
+
+    document.getElementById('stat-total').textContent = totalAmount.toLocaleString('ru-RU');
+    document.getElementById('stat-remain').textContent = totalRemain.toLocaleString('ru-RU');
+    document.getElementById('stat-prize').textContent = totalPrize.toLocaleString('ru-RU');
+    document.getElementById('stat-avg').textContent = avg.toLocaleString('ru-RU');
+    document.getElementById('rowCount').textContent = `${players.length} игроков`;
+
+    let html = '';
+    data.forEach((p, idx) => {
+      const remain = Math.floor(p.amount * 0.4);
+      const prize = Math.floor(p.amount / 100);
+      const progressPct = (p.amount / maxAmount * 100).toFixed(1);
+      const isEmpty = p.amount === 0;
+
+      html += `
+        <tr class="${isEmpty ? 'empty-row' : ''}">
+          <td>
+            <div class="name-cell">
+              <div class="avatar" style="background:${getAvatarColor(p.name)}">${getInitials(p.name)}</div>
+              ${p.name}
+            </div>
+          </td>
+          <td style="text-align:center">
+            <input type="number" class="input-number" value="${p.amount}" 
+                   min="0" onchange="updateAmount(${p.id}, this.value)">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:${progressPct}%; background:${isEmpty ? '#e5e7eb' : 'var(--accent)'}"></div>
+            </div>
+          </td>
+          <td style="text-align:center">
+            <span class="badge badge-blue">${p.cumulative.toLocaleString('ru-RU')}</span>
+          </td>
+          <td style="text-align:center">
+            <span class="badge ${remain > 0 ? 'badge-green' : 'badge-gray'}">${remain.toLocaleString('ru-RU')}</span>
+          </td>
+          <td style="text-align:center">
+            <div class="prize-display">
+              <span class="badge ${prize > 0 ? 'badge-amber' : 'badge-gray'}">${prize}</span>
+              <span class="prize-icon">${prize >= 2 ? '📦📦' : prize >= 1 ? '📦' : '—'}</span>
+            </div>
+          </td>
+          <td style="text-align:center">
+            <button class="delete-btn" onclick="deletePlayer(${p.id})" title="Удалить">×</button>
+          </td>
+        </tr>
+      `;
+    });
+
+    html += `
+      <tr class="row-total">
+        <td>📊 ИТОГО</td>
+        <td style="text-align:center">${totalAmount.toLocaleString('ru-RU')}</td>
+        <td style="text-align:center">${totalAmount.toLocaleString('ru-RU')}</td>
+        <td style="text-align:center">${totalRemain.toLocaleString('ru-RU')}</td>
+        <td style="text-align:center">${totalPrize.toLocaleString('ru-RU')} пачек</td>
+        <td></td>
+      </tr>
+    `;
+
+    tbody.innerHTML = html;
+  }
+
+  function updateAmount(id, value) {
+    const player = players.find(p => p.id === id);
+    if (player) {
+      player.amount = Math.max(0, parseInt(value) || 0);
+      renderTable();
+    }
+  }
+
+  function addPlayer() {
+    const name = prompt('Введите имя и фамилию игрока:');
+    if (name && name.trim()) {
+      players.push({ id: nextId++, name: name.trim(), amount: 0 });
+      renderTable();
+    }
+  }
+
+  function deletePlayer(id) {
+    if (confirm('Удалить игрока?')) {
+      players = players.filter(p => p.id !== id);
+      renderTable();
+    }
+  }
+
+  function sortTable(col) {
+    if (sortCol === col) {
+      sortAsc = !sortAsc;
+    } else {
+      sortCol = col;
+      sortAsc = true;
+    }
+    renderTable();
+  }
+
+  function filterTable() {
+    renderTable();
+  }
+
+  function exportToCSV() {
+    let csv = 'Имя,Фактическое количество,Накопительная сумма,Остаток (40%),Приз (пачки)\n';
+    const data = calculateCumulative(players);
+    data.forEach(p => {
+      csv += `${p.name},${p.amount},${p.cumulative},${Math.floor(p.amount * 0.4)},${Math.floor(p.amount / 100)}\n`;
+    });
+    const blob = new Blob([\uFEFF + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'production_tracker.csv';
+    link.click();
+  }
+
+  function exportToJSON() {
+    const data = calculateCumulative(players);
+    const json = JSON.stringify(data, null, 2);
+    navigator.clipboard.writeText(json).then(() => {
+      alert('Данные скопированы в буфер обмена!');
+    });
+  }
+
+  function clearAll() {
+    if (confirm('Очистить все данные? Это удалит всех игроков.')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+    }
+  }
+
+  // Инициализация
+  renderTable();
+</script>
+
+</body>
+</html>
