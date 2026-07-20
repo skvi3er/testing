@@ -1,6 +1,5 @@
 
-# Перепишу файл полностью с правильным кодом, убедившись что addPlayer полностью определена
-html_content = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
@@ -8,7 +7,7 @@ html_content = r'''<!DOCTYPE html>
 <title>📦 Трекер сдачи продукции — Онлайн-игра</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-  
+
   :root {
     --bg: #f0f2f5;
     --card: #ffffff;
@@ -29,9 +28,9 @@ html_content = r'''<!DOCTYPE html>
     --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
     --shadow-hover: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
   }
-  
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--bg);
@@ -39,12 +38,12 @@ html_content = r'''<!DOCTYPE html>
     padding: 24px;
     color: var(--text-primary);
   }
-  
+
   .tracker-container {
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   .tracker-header {
     display: flex;
     justify-content: space-between;
@@ -53,27 +52,27 @@ html_content = r'''<!DOCTYPE html>
     flex-wrap: wrap;
     gap: 16px;
   }
-  
+
   .tracker-title {
     font-size: 24px;
     font-weight: 700;
     color: var(--text-primary);
     letter-spacing: -0.5px;
   }
-  
+
   .tracker-subtitle {
     font-size: 13px;
     color: var(--text-secondary);
     margin-top: 4px;
     font-weight: 400;
   }
-  
+
   .stats-row {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
   }
-  
+
   .stat-card {
     background: var(--card);
     border-radius: 10px;
@@ -82,7 +81,7 @@ html_content = r'''<!DOCTYPE html>
     min-width: 140px;
     border: 1px solid var(--border);
   }
-  
+
   .stat-label {
     font-size: 11px;
     text-transform: uppercase;
@@ -91,18 +90,18 @@ html_content = r'''<!DOCTYPE html>
     font-weight: 600;
     margin-bottom: 4px;
   }
-  
+
   .stat-value {
     font-size: 22px;
     font-weight: 700;
     color: var(--text-primary);
   }
-  
+
   .stat-card.total { border-left: 3px solid var(--accent); }
   .stat-card.remain { border-left: 3px solid var(--success); }
   .stat-card.prize { border-left: 3px solid var(--warning); }
   .stat-card.avg { border-left: 3px solid var(--purple); }
-  
+
   .table-wrapper {
     background: var(--card);
     border-radius: var(--radius);
@@ -110,7 +109,7 @@ html_content = r'''<!DOCTYPE html>
     overflow: hidden;
     border: 1px solid var(--border);
   }
-  
+
   .table-toolbar {
     display: flex;
     justify-content: space-between;
@@ -121,17 +120,17 @@ html_content = r'''<!DOCTYPE html>
     flex-wrap: wrap;
     gap: 12px;
   }
-  
+
   .toolbar-left {
     display: flex;
     align-items: center;
     gap: 12px;
   }
-  
+
   .search-box {
     position: relative;
   }
-  
+
   .search-box input {
     padding: 8px 12px 8px 34px;
     border: 1px solid var(--border);
@@ -142,12 +141,12 @@ html_content = r'''<!DOCTYPE html>
     transition: all 0.2s;
     font-family: inherit;
   }
-  
+
   .search-box input:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
   }
-  
+
   .search-box::before {
     content: "🔍";
     position: absolute;
@@ -157,7 +156,7 @@ html_content = r'''<!DOCTYPE html>
     font-size: 12px;
     opacity: 0.5;
   }
-  
+
   .btn {
     padding: 8px 16px;
     border: none;
@@ -171,42 +170,42 @@ html_content = r'''<!DOCTYPE html>
     align-items: center;
     gap: 6px;
   }
-  
+
   .btn-primary {
     background: var(--accent);
     color: white;
   }
-  
+
   .btn-primary:hover {
     background: #2563eb;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59,130,246,0.3);
   }
-  
+
   .btn-ghost {
     background: transparent;
     color: var(--text-secondary);
     border: 1px solid var(--border);
   }
-  
+
   .btn-ghost:hover {
     background: var(--bg);
     color: var(--text-primary);
   }
-  
+
   table {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
   }
-  
+
   thead {
     background: linear-gradient(to bottom, #f8fafc, #f1f5f9);
     position: sticky;
     top: 0;
     z-index: 10;
   }
-  
+
   th {
     padding: 14px 16px;
     text-align: left;
@@ -221,45 +220,45 @@ html_content = r'''<!DOCTYPE html>
     cursor: pointer;
     transition: background 0.15s;
   }
-  
+
   th:hover {
     background: #e2e8f0;
   }
-  
+
   th .sort-icon {
     margin-left: 4px;
     opacity: 0.3;
     font-size: 10px;
   }
-  
+
   th.sorted .sort-icon {
     opacity: 1;
     color: var(--accent);
   }
-  
+
   td {
     padding: 12px 16px;
     border-bottom: 1px solid #f1f5f9;
     color: var(--text-primary);
     vertical-align: middle;
   }
-  
+
   tbody tr {
     transition: all 0.15s;
   }
-  
+
   tbody tr:hover {
     background: #f8fafc;
   }
-  
+
   tbody tr:nth-child(even) {
     background: #fafbfc;
   }
-  
+
   tbody tr:nth-child(even):hover {
     background: #f1f5f9;
   }
-  
+
   .name-cell {
     font-weight: 600;
     color: var(--text-primary);
@@ -267,7 +266,7 @@ html_content = r'''<!DOCTYPE html>
     align-items: center;
     gap: 10px;
   }
-  
+
   .avatar {
     width: 32px;
     height: 32px;
@@ -281,7 +280,7 @@ html_content = r'''<!DOCTYPE html>
     font-weight: 700;
     flex-shrink: 0;
   }
-  
+
   .input-number {
     width: 80px;
     padding: 6px 10px;
@@ -296,12 +295,12 @@ html_content = r'''<!DOCTYPE html>
     outline: none;
     transition: all 0.2s;
   }
-  
+
   .input-number:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
   }
-  
+
   .badge {
     display: inline-flex;
     align-items: center;
@@ -310,32 +309,32 @@ html_content = r'''<!DOCTYPE html>
     font-size: 12px;
     font-weight: 600;
   }
-  
+
   .badge-blue {
     background: var(--accent-light);
     color: var(--accent);
   }
-  
+
   .badge-green {
     background: var(--success-light);
     color: var(--success);
   }
-  
+
   .badge-amber {
     background: var(--warning-light);
     color: #b45309;
   }
-  
+
   .badge-purple {
     background: var(--purple-light);
     color: var(--purple);
   }
-  
+
   .badge-gray {
     background: #f3f4f6;
     color: #9ca3af;
   }
-  
+
   .progress-bar {
     width: 100%;
     height: 6px;
@@ -344,46 +343,46 @@ html_content = r'''<!DOCTYPE html>
     overflow: hidden;
     margin-top: 4px;
   }
-  
+
   .progress-fill {
     height: 100%;
     border-radius: 3px;
     transition: width 0.5s ease;
   }
-  
+
   .row-total {
     background: linear-gradient(to right, #f8fafc, #f1f5f9) !important;
     font-weight: 700;
     border-top: 2px solid #e2e8f0;
   }
-  
+
   .row-total td {
     padding: 16px;
     color: var(--text-primary);
     font-size: 14px;
   }
-  
+
   .empty-row td {
     color: #9ca3af;
     font-style: italic;
   }
-  
+
   .prize-display {
     display: flex;
     align-items: center;
     gap: 6px;
   }
-  
+
   .prize-icon {
     font-size: 14px;
   }
-  
+
   .formula-hint {
     font-size: 10px;
     color: var(--text-secondary);
     margin-top: 2px;
   }
-  
+
   .delete-btn {
     background: none;
     border: none;
@@ -395,16 +394,16 @@ html_content = r'''<!DOCTYPE html>
     transition: all 0.2s;
     opacity: 0;
   }
-  
+
   tr:hover .delete-btn {
     opacity: 1;
   }
-  
+
   .delete-btn:hover {
     color: var(--danger);
     background: var(--danger-light);
   }
-  
+
   .table-footer {
     padding: 12px 20px;
     border-top: 1px solid var(--border);
@@ -417,44 +416,44 @@ html_content = r'''<!DOCTYPE html>
     flex-wrap: wrap;
     gap: 8px;
   }
-  
+
   .legend {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
   }
-  
+
   .legend-item {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 11px;
   }
-  
+
   .legend-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
   }
-  
+
   .export-bar {
     display: flex;
     gap: 8px;
     margin-bottom: 16px;
     flex-wrap: wrap;
   }
-  
+
   .btn-export {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
   }
-  
+
   .btn-export:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(102,126,234,0.3);
   }
-  
+
   @media (max-width: 768px) {
     body { padding: 12px; }
     .tracker-header { flex-direction: column; align-items: flex-start; }
@@ -466,6 +465,7 @@ html_content = r'''<!DOCTYPE html>
     .toolbar-left { flex-wrap: wrap; }
   }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -494,13 +494,13 @@ html_content = r'''<!DOCTYPE html>
       </div>
     </div>
   </div>
-  
+
   <div class="export-bar">
     <button class="btn btn-export" onclick="exportToCSV()">📥 Скачать CSV</button>
     <button class="btn btn-ghost" onclick="exportToJSON()">📋 Скопировать JSON</button>
     <button class="btn btn-ghost" onclick="clearAll()">🗑️ Очистить все</button>
   </div>
-  
+
   <div class="table-wrapper">
     <div class="table-toolbar">
       <div class="toolbar-left">
@@ -512,7 +512,7 @@ html_content = r'''<!DOCTYPE html>
       </div>
       <button class="btn btn-primary" onclick="addPlayer()">➕ Добавить игрока</button>
     </div>
-    
+
     <table id="productionTable">
       <thead>
         <tr>
@@ -527,7 +527,7 @@ html_content = r'''<!DOCTYPE html>
       <tbody id="tableBody">
       </tbody>
     </table>
-    
+
     <div class="table-footer">
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Фактическое — вводится вручную</div>
@@ -555,16 +555,16 @@ html_content = r'''<!DOCTYPE html>
     { id: 11, name: "Кузнецов Михаил", amount: 170 },
     { id: 12, name: "Васильева Наталья", amount: 90 }
   ];
-  
+
   let nextId = 13;
   let sortCol = null;
   let sortAsc = true;
-  
+
   function getInitials(name) {
     const parts = name.split(' ');
     return (parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : '');
   }
-  
+
   function getAvatarColor(name) {
     const colors = [
       ['#667eea', '#764ba2'],
@@ -585,7 +585,7 @@ html_content = r'''<!DOCTYPE html>
     const idx = Math.abs(hash) % colors.length;
     return 'linear-gradient(135deg, ' + colors[idx][0] + ', ' + colors[idx][1] + ')';
   }
-  
+
   function calculateCumulative(data) {
     let sum = 0;
     return data.map(function(p) {
@@ -593,7 +593,7 @@ html_content = r'''<!DOCTYPE html>
       return { id: p.id, name: p.name, amount: p.amount, cumulative: sum };
     });
   }
-  
+
   function getSortedPlayers() {
     let data = players.slice();
     if (sortCol === 'name') {
@@ -607,19 +607,19 @@ html_content = r'''<!DOCTYPE html>
     }
     return calculateCumulative(data);
   }
-  
+
   function renderTable() {
     const tbody = document.getElementById('tableBody');
     const search = document.getElementById('searchInput').value.toLowerCase();
     let data = getSortedPlayers().filter(function(p) {
       return p.name.toLowerCase().includes(search);
     });
-    
+
     let maxAmount = 1;
     for (let i = 0; i < players.length; i++) {
       if (players[i].amount > maxAmount) maxAmount = players[i].amount;
     }
-    
+
     let totalAmount = 0;
     let totalRemain = 0;
     let totalPrize = 0;
@@ -629,13 +629,13 @@ html_content = r'''<!DOCTYPE html>
       totalPrize += Math.floor(players[i].amount / 100);
     }
     const avg = players.length > 0 ? Math.round(totalAmount / players.length) : 0;
-    
+
     document.getElementById('stat-total').textContent = totalAmount.toLocaleString('ru-RU');
     document.getElementById('stat-remain').textContent = totalRemain.toLocaleString('ru-RU');
     document.getElementById('stat-prize').textContent = totalPrize.toLocaleString('ru-RU');
     document.getElementById('stat-avg').textContent = avg.toLocaleString('ru-RU');
     document.getElementById('rowCount').textContent = players.length + ' игроков';
-    
+
     let html = '';
     for (let i = 0; i < data.length; i++) {
       const p = data[i];
@@ -643,7 +643,7 @@ html_content = r'''<!DOCTYPE html>
       const prize = Math.floor(p.amount / 100);
       const progressPct = (p.amount / maxAmount * 100).toFixed(1);
       const isEmpty = p.amount === 0;
-      
+
       html += '<tr class="' + (isEmpty ? 'empty-row' : '') + '">';
       html += '<td><div class="name-cell"><div class="avatar" style="background:' + getAvatarColor(p.name) + '">' + getInitials(p.name) + '</div>' + p.name + '</div></td>';
       html += '<td style="text-align:center"><input type="number" class="input-number" value="' + p.amount + '" min="0" onchange="updateAmount(' + p.id + ', this.value)"><div class="progress-bar"><div class="progress-fill" style="width:' + progressPct + '%; background:' + (isEmpty ? '#e5e7eb' : 'var(--accent)') + '"></div></div></td>';
@@ -653,7 +653,7 @@ html_content = r'''<!DOCTYPE html>
       html += '<td style="text-align:center"><button class="delete-btn" onclick="deletePlayer(' + p.id + ')" title="Удалить">×</button></td>';
       html += '</tr>';
     }
-    
+
     html += '<tr class="row-total">';
     html += '<td>📊 ИТОГО</td>';
     html += '<td style="text-align:center">' + totalAmount.toLocaleString('ru-RU') + '</td>';
@@ -662,10 +662,10 @@ html_content = r'''<!DOCTYPE html>
     html += '<td style="text-align:center">' + totalPrize.toLocaleString('ru-RU') + ' пачек</td>';
     html += '<td></td>';
     html += '</tr>';
-    
+
     tbody.innerHTML = html;
   }
-  
+
   function updateAmount(id, value) {
     for (let i = 0; i < players.length; i++) {
       if (players[i].id === id) {
@@ -675,7 +675,7 @@ html_content = r'''<!DOCTYPE html>
       }
     }
   }
-  
+
   function addPlayer() {
     const name = prompt('Введите имя и фамилию игрока:');
     if (name && name.trim()) {
@@ -684,14 +684,14 @@ html_content = r'''<!DOCTYPE html>
       renderTable();
     }
   }
-  
+
   function deletePlayer(id) {
     if (confirm('Удалить игрока?')) {
       players = players.filter(function(p) { return p.id !== id; });
       renderTable();
     }
   }
-  
+
   function sortTable(col) {
     if (sortCol === col) {
       sortAsc = !sortAsc;
@@ -701,11 +701,11 @@ html_content = r'''<!DOCTYPE html>
     }
     renderTable();
   }
-  
+
   function filterTable() {
     renderTable();
   }
-  
+
   function exportToCSV() {
     let csv = 'Имя,Фактическое количество,Накопительная сумма,Остаток (40%),Приз (пачки)\n';
     const data = calculateCumulative(players);
@@ -719,7 +719,7 @@ html_content = r'''<!DOCTYPE html>
     link.download = 'production_tracker.csv';
     link.click();
   }
-  
+
   function exportToJSON() {
     const data = calculateCumulative(players);
     const json = JSON.stringify(data, null, 2);
@@ -727,7 +727,7 @@ html_content = r'''<!DOCTYPE html>
       alert('Данные скопированы в буфер обмена!');
     });
   }
-  
+
   function clearAll() {
     if (confirm('Очистить все данные? Это удалит всех игроков.')) {
       players = [];
@@ -735,21 +735,10 @@ html_content = r'''<!DOCTYPE html>
       renderTable();
     }
   }
-  
+
   // Инициализация
   renderTable();
 </script>
 
 </body>
-</html>'''
-
-with open('/mnt/agents/output/production_tracker.html', 'w', encoding='utf-8') as f:
-    f.write(html_content)
-
-print("Файл сохранён. Размер:", len(html_content), "символов")
-
-# Проверим что addPlayer полностью записана
-if 'function addPlayer()' in html_content and 'players.push({ id: nextId, name: name.trim(), amount: 0 });' in html_content:
-    print("✅ addPlayer полностью определена")
-else:
-    print("❌ addPlayer НЕ найдена полностью")
+</html>
