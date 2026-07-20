@@ -16,23 +16,6 @@
   .header-left h1 { font-size: 24px; }
   .brand { font-size: 32px; font-weight: 900; color: #1a1a2e; letter-spacing: 2px; background: linear-gradient(135deg, #1a1a2e, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-  .header-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-
-  /* РАДИО ПЛЕЕР */
-  .radio-player { display: flex; align-items: center; gap: 8px; background: #1a1a2e; padding: 6px 14px 6px 10px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-  .radio-player .radio-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 1.5s infinite; flex-shrink: 0; }
-  .radio-player .radio-dot.muted { background: #6b7280; animation: none; }
-  .radio-player .radio-label { color: #e5e7eb; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
-  .radio-player .radio-label span { color: #f59e0b; }
-  .radio-player .radio-btn { background: none; border: none; color: #e5e7eb; font-size: 16px; cursor: pointer; padding: 2px 4px; transition: all 0.2s; border-radius: 4px; display: flex; align-items: center; }
-  .radio-player .radio-btn:hover { background: rgba(255,255,255,0.1); color: white; }
-  .radio-player .radio-btn.muted { color: #6b7280; }
-  .radio-player .radio-volume { display: flex; align-items: center; gap: 4px; }
-  .radio-player .volume-slider { width: 50px; height: 4px; -webkit-appearance: none; appearance: none; background: #4b5563; border-radius: 2px; outline: none; }
-  .radio-player .volume-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; cursor: pointer; }
-  .radio-player .volume-slider::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; cursor: pointer; border: none; }
-  .radio-player .volume-text { color: #9ca3af; font-size: 11px; min-width: 28px; text-align: center; }
-
   .stats { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat { background: white; padding: 12px 20px; border-radius: 10px; min-width: 120px; border-left: 3px solid #3b82f6; }
   .stat-label { font-size: 11px; color: #6b7280; text-transform: uppercase; }
@@ -131,9 +114,6 @@
     th, td { padding: 8px 10px; font-size: 12px; }
     .avatar { width: 28px; height: 28px; font-size: 11px; }
     .dropdown-content { min-width: 180px; right: 0; left: auto; }
-    .radio-player .volume-slider { width: 30px; }
-    .radio-player .radio-label { font-size: 11px; }
-    .radio-player .volume-text { font-size: 10px; min-width: 22px; }
   }
 </style>
 </head>
@@ -145,31 +125,18 @@
       <h1>📦 Трекер сдачи продукции</h1>
       <span class="brand">BLACK-ROSE</span>
     </div>
-    <div class="header-right">
-      <!-- РАДИО ПЛЕЕР -->
-      <div class="radio-player" id="radioPlayer">
-        <div class="radio-dot" id="radioDot"></div>
-        <span class="radio-label">🎵 <span>Зайцев</span> FM</span>
-        <div class="radio-volume">
-          <button class="radio-btn" id="radioMuteBtn" title="Выключить звук">🔊</button>
-          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
-          <span class="volume-text" id="volumeText">50%</span>
-        </div>
+    <div class="stats">
+      <div class="stat" style="border-color:#3b82f6;">
+        <div class="stat-label">Всего сдано</div>
+        <div class="stat-value" id="statTotal">0</div>
       </div>
-
-      <div class="stats">
-        <div class="stat" style="border-color:#3b82f6;">
-          <div class="stat-label">Всего сдано</div>
-          <div class="stat-value" id="statTotal">0</div>
-        </div>
-        <div class="stat" style="border-color:#10b981;">
-          <div class="stat-label">Остаток (40%)</div>
-          <div class="stat-value" id="statRemain">0</div>
-        </div>
-        <div class="stat" style="border-color:#f59e0b;">
-          <div class="stat-label">Выдача (пачки)</div>
-          <div class="stat-value" id="statPrize">0</div>
-        </div>
+      <div class="stat" style="border-color:#10b981;">
+        <div class="stat-label">Остаток (40%)</div>
+        <div class="stat-value" id="statRemain">0</div>
+      </div>
+      <div class="stat" style="border-color:#f59e0b;">
+        <div class="stat-label">Выдача (пачки)</div>
+        <div class="stat-value" id="statPrize">0</div>
       </div>
     </div>
   </div>
@@ -269,94 +236,7 @@ let players = [];
 let nextId = 1;
 let currentSort = 'reset';
 let editingNameId = null;
-
-// ==========================================
-// 🎵 РАДИО ПЛЕЕР
-// ==========================================
-
-let radioAudio = null;
-let isRadioMuted = false;
-let radioVolume = 50;
-
-function initRadio() {
-  // Восстанавливаем настройки из localStorage
-  const savedVolume = localStorage.getItem('radioVolume');
-  const savedMuted = localStorage.getItem('radioMuted');
-
-  if (savedVolume !== null) {
-    radioVolume = parseInt(savedVolume);
-  }
-  if (savedMuted !== null) {
-    isRadioMuted = savedMuted === 'true';
-  }
-
-  // Создаём аудио
-  radioAudio = new Audio('https://radio.zaycev.fm/audio/zaycev-fm-128.mp3');
-  radioAudio.loop = true;
-  radioAudio.volume = isRadioMuted ? 0 : radioVolume / 100;
-
-  // Обновляем интерфейс
-  updateRadioUI();
-
-  // Пытаемся включить (автоплей может быть заблокирован браузером)
-  radioAudio.play().catch(() => {
-    // Не играет автоматически — пользователь включит сам через кнопку
-  });
-
-  // Ползунок громкости
-  const slider = document.getElementById('volumeSlider');
-  slider.value = radioVolume;
-  slider.addEventListener('input', function() {
-    radioVolume = parseInt(this.value);
-    localStorage.setItem('radioVolume', radioVolume);
-    if (!isRadioMuted) {
-      radioAudio.volume = radioVolume / 100;
-    }
-    updateRadioUI();
-  });
-
-  // Кнопка mute
-  document.getElementById('radioMuteBtn').addEventListener('click', function() {
-    isRadioMuted = !isRadioMuted;
-    localStorage.setItem('radioMuted', isRadioMuted);
-    if (isRadioMuted) {
-      radioAudio.volume = 0;
-    } else {
-      radioAudio.volume = radioVolume / 100;
-    }
-    updateRadioUI();
-  });
-
-  // Клик по радио-плееру для включения/выключения (дубль)
-  document.getElementById('radioPlayer').addEventListener('dblclick', function() {
-    if (radioAudio.paused) {
-      radioAudio.play().catch(() => {});
-    } else {
-      radioAudio.pause();
-    }
-  });
-}
-
-function updateRadioUI() {
-  const dot = document.getElementById('radioDot');
-  const muteBtn = document.getElementById('radioMuteBtn');
-  const volumeText = document.getElementById('volumeText');
-
-  volumeText.textContent = radioVolume + '%';
-
-  if (isRadioMuted || radioVolume === 0) {
-    dot.className = 'radio-dot muted';
-    muteBtn.textContent = '🔇';
-    muteBtn.className = 'radio-btn muted';
-  } else {
-    dot.className = 'radio-dot';
-    muteBtn.textContent = '🔊';
-    muteBtn.className = 'radio-btn';
-  }
-
-  // Синхронизируем ползунок
-  document.getElementById('volumeSlider').value = radioVolume;
-}
+let dataLoaded = false;
 
 // ==========================================
 // 💾 РАБОТА С ДАННЫМИ
@@ -382,11 +262,14 @@ function loadFromFirebase() {
       nextId = data.nextId || 1;
       updateStatus(true, '☁️ Синхронизировано');
     } else {
-      players = [
-        { id: 1, name: "Честер Курил", amount: 100 }
-      ];
-      nextId = 2;
-      setTimeout(saveToFirebase, 500);
+      if (!dataLoaded) {
+        players = [
+          { id: 1, name: "Честер Курил", amount: 100 }
+        ];
+        nextId = 2;
+        setTimeout(saveToFirebase, 500);
+        dataLoaded = true;
+      }
     }
     renderTable();
   }, () => updateStatus(false, '⚠️ Ошибка соединения'));
@@ -651,4 +534,142 @@ function renderTable() {
   document.getElementById('rowCount').textContent = players.length + ' игроков';
 
   if (!players.length) {
-    document.getElementById('tableBody').innerHTML = '<tr><
+    document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:#9ca3af;">👾 Нет игроков. Нажмите "Добавить игрока"</td></tr>';
+    return;
+  }
+
+  let max = Math.max(1, ...players.map(p => p.amount));
+  let html = '';
+
+  data.forEach(p => {
+    const remainP = Math.floor(p.amount * 0.4);
+    const prizeP = Math.floor(p.amount / 100);
+    const progress = (p.amount / max * 100).toFixed(1);
+    const empty = p.amount === 0;
+
+    let topPlace = 0;
+    if (p.amount > 0) {
+      const idx = top3Ids.indexOf(p.id);
+      if (idx !== -1) topPlace = idx + 1;
+    }
+
+    let nameHtml = '';
+    if (editingNameId === p.id) {
+      nameHtml = `
+        <input class="name-input" type="text" value="${p.name}" id="nameInput_${p.id}" 
+               onblur="saveName(${p.id}, this)" 
+               onkeydown="if(event.key==='Enter') saveName(${p.id}, this); if(event.key==='Escape') cancelEditName();"
+               autofocus>
+      `;
+    } else {
+      nameHtml = `<span class="name-text" onclick="startEditName(${p.id})">${p.name}</span>`;
+    }
+
+    html += `<tr>
+      <td>
+        <div class="name-cell">
+          ${getAvatarHtml(p, topPlace)}
+          ${nameHtml}
+        </div>
+      </td>
+      <td style="text-align:center">
+        <input type="number" value="${p.amount}" min="0" onchange="updateAmount(${p.id}, this.value)">
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${progress}%;background:${empty ? '#e5e7eb' : '#3b82f6'};"></div>
+        </div>
+      </td>
+      <td style="text-align:center"><span class="badge badge-blue">${p.cumulative || 0}</span></td>
+      <td style="text-align:center"><span class="badge ${remainP > 0 ? 'badge-green' : 'badge-gray'}">${remainP}</span></td>
+      <td style="text-align:center">
+        <span class="badge ${prizeP > 0 ? 'badge-amber' : 'badge-gray'}">
+          ${prizeP > 0 ? '📦 ' : ''}${prizeP}
+        </span>
+      </td>
+      <td><button class="btn-delete-row" onclick="deletePlayer(${p.id})">×</button></td>
+    </tr>`;
+  });
+
+  html += `<tr class="total-row">
+    <td>📊 ИТОГО</td>
+    <td style="text-align:center">${total}</td>
+    <td style="text-align:center">${total}</td>
+    <td style="text-align:center">${remain}</td>
+    <td style="text-align:center">${prize} пачек</td>
+    <td></td>
+  </tr>`;
+
+  document.getElementById('tableBody').innerHTML = html;
+
+  if (editingNameId !== null) {
+    const input = document.getElementById('nameInput_' + editingNameId);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  }
+}
+
+// ==========================================
+// 🎮 ДЕЙСТВИЯ
+// ==========================================
+
+function updateAmount(id, val) {
+  const p = players.find(p => p.id === id);
+  if (p) {
+    p.amount = Math.max(0, parseInt(val) || 0);
+    let sum = 0;
+    players.forEach(player => {
+      sum += player.amount;
+      player.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function addPlayer() {
+  const name = prompt('Введите имя игрока:');
+  if (name && name.trim()) {
+    players.push({ id: nextId++, name: name.trim(), amount: 0 });
+    let sum = 0;
+    players.forEach(p => {
+      sum += p.amount;
+      p.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function deletePlayer(id) {
+  if (confirm('Удалить игрока?')) {
+    players = players.filter(p => p.id !== id);
+    let sum = 0;
+    players.forEach(p => {
+      sum += p.amount;
+      p.cumulative = sum;
+    });
+    renderTable();
+    saveToFirebase();
+  }
+}
+
+function clearAll() {
+  if (confirm('❗ ВНИМАНИЕ! Это удалит ВСЕХ игроков и все данные. Продолжить?')) {
+    if (confirm('Вы уверены? Данные восстановить будет невозможно!')) {
+      players = [];
+      nextId = 1;
+      renderTable();
+      saveToFirebase();
+    }
+  }
+}
+
+// ==========================================
+// 🚀 ЗАПУСК
+// ==========================================
+
+loadFromFirebase();
+</script>
+</body>
+</html>
