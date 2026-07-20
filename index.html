@@ -14,20 +14,7 @@
   .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
   .header-left { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
   .header-left h1 { font-size: 24px; }
-  .brand {
-    font-size: 32px;
-    font-weight: 900;
-    color: #1a1a2e;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #1a1a2e, #3b82f6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.15s;
-  }
-  .brand:hover { transform: scale(1.02); }
-  .brand:active { transform: scale(0.95); }
+  .brand { font-size: 32px; font-weight: 900; color: #1a1a2e; letter-spacing: 2px; background: linear-gradient(135deg, #1a1a2e, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
   .stats { display: flex; gap: 12px; flex-wrap: wrap; }
   .stat { background: white; padding: 12px 20px; border-radius: 10px; min-width: 120px; border-left: 3px solid #3b82f6; }
@@ -118,6 +105,7 @@
   .modal-buttons { display: flex; gap: 10px; justify-content: flex-end; }
   .modal-buttons .btn { padding: 10px 24px; }
 
+  /* ===== БЕЙДЖ РЕЖИМА ===== */
   .mode-badge {
     background: #8b5cf6;
     color: white;
@@ -155,7 +143,7 @@
   <div class="header">
     <div class="header-left">
       <h1>📦 Трекер сдачи продукции</h1>
-      <span class="brand" id="brandLogo" title="Двойной клик для админки">BLACK-ROSE</span>
+      <span class="brand">BLACK-ROSE</span>
       <span class="mode-badge" id="modeBadge">🔒 Просмотр</span>
     </div>
     <div class="stats">
@@ -273,14 +261,19 @@ let dataLoaded = false;
 let isAdmin = false;
 
 // ==========================================
-// 🔐 АДМИНКА ПО ДВОЙНОМУ КЛИКУ
+// 🔐 АДМИНКА ЧЕРЕЗ КОНСОЛЬ
 // ==========================================
 
-document.getElementById('brandLogo').addEventListener('dblclick', function(e) {
+// Функция для включения/выключения админки
+window.admin = function() {
   isAdmin = !isAdmin;
   updateAdminMode();
   showNotification(isAdmin ? '🔓 Админка включена' : '🔒 Админка выключена');
-});
+  console.log(isAdmin ? '✅ Админка включена' : '❌ Админка выключена');
+};
+
+// Подсказка в консоли
+console.log('🔐 Для входа в админку введите: admin()');
 
 function updateAdminMode() {
   const badge = document.getElementById('modeBadge');
@@ -681,7 +674,3 @@ function renderTable() {
       input.select();
     }
   }
-}
-
-// ==========================================
-//
